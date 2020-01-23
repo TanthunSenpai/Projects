@@ -8,7 +8,7 @@ class EditorButtons:
     def __init__(self, master, r, c):
         self.master = master
         self.frame = Frame(master)
-        self.frame.grid(row = r, column = c)
+        self.frame.grid(row = r, column = c, sticky = W)
         self.runButton = Button(self.frame,text = "Run")
         self.runButton.grid(row = 0, column = 0)
         self.stepButton = Button(self.frame,text = "Step")
