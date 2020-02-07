@@ -3,6 +3,7 @@ try:
 except:
     from Tkinter import *
 
+import tkinter.tix as Tix
 import tkinter.scrolledtext as ScrolledText
 
 
@@ -14,7 +15,24 @@ class Editor:
         self.font = ("Consolas",self.fontSize)
         self.frame.grid(row = r, column = c)
         self.textArea = ScrolledText.ScrolledText(self.frame, width = 40, height = 20, font = self.font)
+        self.textArea.Text.configure(text = "enter your text")
         self.textArea.grid(row = 0, column = 1)
+
+
+    def check_syntax(self):
+
+
+        return 1
+
+    def lexical_analysis(self):
+
+
+
+
+
+        return
+
+
 
 
 
