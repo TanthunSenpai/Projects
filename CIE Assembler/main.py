@@ -18,8 +18,7 @@ if __name__ == "__main__":
     editButtons = EditorButtons(root, 0,0)
     editor = Editor(root,1,0)
     ramDisplay = RamDisplay(root, 1,2)
-
-
+    root.bind("<F5>", editor.lexical_analysis)
 
 
 

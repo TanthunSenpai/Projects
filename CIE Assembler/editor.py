@@ -3,9 +3,6 @@ try:
 except:
     from Tkinter import *
 
-import tkinter.tix as Tix
-import tkinter.scrolledtext as ScrolledText
-
 
 class Editor:
     def __init__(self, master, r, c):
@@ -14,9 +11,12 @@ class Editor:
         self.fontSize = 14
         self.font = ("Consolas",self.fontSize)
         self.frame.grid(row = r, column = c)
-        self.textArea = ScrolledText.ScrolledText(self.frame, width = 40, height = 20, font = self.font)
-        self.textArea.Text.configure(text = "enter your text")
-        self.textArea.grid(row = 0, column = 1)
+        self.scrollBar = Scrollbar(self.frame, orient = VERTICAL)
+        self.scrollBar.pack(side = RIGHT, fill = Y)
+        self.textArea = Text(self.frame, width = 40, height = 20, font = self.font, yscrollcommand = self.scrollBar.set)
+        self.textArea.pack(side = LEFT)
+        self.scrollBar.config(command = self.textArea.yview)
+        self.textArea.insert(INSERT, "HOOLA\n"*20)
 
 
     def check_syntax(self):
@@ -24,9 +24,10 @@ class Editor:
 
         return 1
 
-    def lexical_analysis(self):
-
-
+    def lexical_analysis(self, *arg):
+        text = self.textArea.get('0.0','end').strip()
+        text = text.split("\n")
+        print(text)
 
 
 
@@ -35,10 +36,11 @@ class Editor:
 
 
 
-
 if __name__ == "__main__":
     root = Tk()
     editor = Editor(root,0,0)
+    editor.lexical_analysis()
+
 
 
 
