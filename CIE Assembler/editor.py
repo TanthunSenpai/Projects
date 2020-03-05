@@ -15,7 +15,7 @@ cheerMessages = ["Amazing! you have no errors, I am surprised",
                 "AHahahahhahaha",
                 "I doubt you understood what you did, but anyway Good Job!",
                 "Nice!",
-                "Is it bird!?.. Is it an airplane!?... NO! it's a code without mistakes..."
+                "Is it bird!?.. Is it an airplane!?... Is it a Glider!?...NO! it's a code without mistakes..."
                 ]
 
 
