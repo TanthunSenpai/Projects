@@ -1,4 +1,4 @@
-OPCODETOHEXDICT = { #CONSTANT Dictionary to hold keywords and functions that will be called
+OPCODETOHEX = { #CONSTANT Dictionary to hold opcodes to their respective hexcodes
     "LDM":"0A",
     "LDD":"0B",
     "LDI":"0C",
@@ -17,7 +17,7 @@ OPCODETOHEXDICT = { #CONSTANT Dictionary to hold keywords and functions that wil
     "END":"2D"
 }
 
-HEXTOFUNCTIONDICT = {
+HEXTOFUNCTION = { #CONSTANT Dictionary to hold hexcodes to the functions we will call
     "0A":LDM,
     "0B":LDD,
     "0C":LDI,
