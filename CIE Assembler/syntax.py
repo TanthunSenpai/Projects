@@ -1,23 +1,29 @@
-OPCODETOHEX = { #CONSTANT Dictionary to hold opcodes to their respective hexcodes
-    "LDM":"0A",
-    "LDD":"0B",
-    "LDI":"0C",
-    "LDX":"0D",
-    "LDR":"0E",
-    "STO":"0F",
-    "ADD":"1A",
-    "INC":"1B",
-    "DEC":"1C",
-    "JMP":"1D",
-    "CMP":"1E",
-    "JPE":"1F",
-    "JPN":"2A",
-    "IN":"2B",
-    "OUT":"2C",
-    "END":"2D"
+OPCODETOHEXDICT = {  # CONSTANT Dictionary to hold keywords and functions that will be called
+    "LDM": "0A",
+    "LDD": "0B",
+    "LDI": "0C",
+    "LDX": "0D",
+    "LDR": "0E",
+    "STO": "0F",
+    "ADD": "1A",
+    "INC": "1B",
+    "DEC": "1C",
+    "JMP": "1D",
+    "CMP": "1E",
+    "JPE": "1F",
+    "JPN": "2A",
+    "IN": "2B",
+    "OUT": "2C",
+    "END": "2D"
 }
 
-HEXTOFUNCTION = { #CONSTANT Dictionary to hold hexcodes to the functions we will call
+VALIDOPERANDS = {
+    "ACC",
+    "IX"
+}
+
+'''
+HEXTOFUNCTIONDICT = {
     "0A":LDM,
     "0B":LDD,
     "0C":LDI,
@@ -35,3 +41,4 @@ HEXTOFUNCTION = { #CONSTANT Dictionary to hold hexcodes to the functions we will
     "2C":OUT,
     "2D":END
 }
+'''
