@@ -4,7 +4,7 @@ except:
     from tkinter import *
 
 
-class EditorButtons:
+class InterpreterControls:
     def __init__(self, master, r, c):
         self.master = master
         self.frame = Frame(master)
