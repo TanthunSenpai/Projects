@@ -41,4 +41,6 @@ HEXTOFUNCTIONDICT = {
     "2C":OUT,
     "2D":END
 }
+
+def LDM():
 '''
