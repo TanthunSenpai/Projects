@@ -46,8 +46,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                         pointerToAdd = hex(self.RAMpointer)[2:].upper()
                         if len(pointerToAdd) == 1:
                             pointerToAdd = "0" + pointerToAdd
-                        self.RAM[index + 1] = pointerToAdd
-                        self.symbolTable[label] = pointerToAdd
+                        self.RAM[index + 1] = pointerToAdd #Changing RAM symbol to the pointer
+                        self.symbolTable[label] = pointerToAdd #Changing the symbol in the symbolTable to the pointer
                         #We can't add a break here as there may be multiple jumps to the same label in the code, so we need to check everything!
         else: #Means the label doesn't exist in the symbol table currently
             hexLine = hex(self.RAMpointer)[2:].upper()#Converts pointer's current position into hex
