@@ -17,7 +17,7 @@ OPCODETOHEXDICT = {  # CONSTANT Dictionary to hold keywords and functions that w
     "END": "2D"
 }
 
-VALIDOPERANDS = {
+SPECIALOPERANDS = {
     "ACC",
     "IX"
 }
@@ -41,9 +41,4 @@ HEXTOFUNCTIONDICT = {
     "2C":OUT,
     "2D":END
 }
-<<<<<<< Updated upstream
-=======
-
-def LDM():
->>>>>>> Stashed changes
 '''
