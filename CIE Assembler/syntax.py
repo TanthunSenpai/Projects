@@ -41,4 +41,9 @@ HEXTOFUNCTIONDICT = {
     "2C":OUT,
     "2D":END
 }
+<<<<<<< Updated upstream
+=======
+
+def LDM():
+>>>>>>> Stashed changes
 '''
