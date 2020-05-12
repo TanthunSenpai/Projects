@@ -3,6 +3,8 @@ try:
 except:
     from tkinter import *
 
+from assembler import *
+import copy
 
 def denHex(x):
     # Converts a denary integer into a formatted hexadecimal string
@@ -88,13 +90,20 @@ class Display:
         pass
 
     def updateRam(self,ram_):
+        self.ram = copy.deepcopy(ram_)
+        self.update()
 
         pass
 
 if __name__ == "__main__":
     root = Tk()
+    a = Assembler()
+    a.init_RAM() #Creating RAM
+    ram, s = a.passThrough([["JMP", "OTHERLABEL"],["LDD","174"],["LDD","174"],["LDD","174"],["LDD","174"],["OUT"],["LABELNAME", "END"],["OTHERLABEL", "LDM","252"]])
     r = Display(root,0,0)
-    r.numSys("Dec")
+    r.numSys("Hex")
+    r.ram = ram
+    r.update()
 
 
 

@@ -58,7 +58,7 @@ class Editor:
         self.textArea.insert(INSERT, "Write your text here my friend...")
 
 
-    def lexical_analysis(self, *arg):
+    def lexical_analysis(self):
         text = self.textArea.get('0.0', 'end').strip()
         text = text.split("\n")
         ret = []
@@ -71,13 +71,12 @@ class Editor:
         else:
             self.rep("No error: " + msg)
 
-
         return ret
 
 
 if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
-    root.bind("<F5>", editor.lexical_analysis)
+
 
     root.mainloop()
