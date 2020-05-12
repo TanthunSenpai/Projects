@@ -64,7 +64,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.RAM[self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]] # First part will always be an opcode
         self.RAMpointer += 1
         if line[1] in syntax.SPECIALOPERANDS: #Checking if the original line was in the form OPCODE SPECIALOPERAND
-            self.RAM[self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]]
+            self.RAM[self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]] #If it was a specal operand, we add the corresponding hex code for that operand (see syntax.py)
         elif line[0] == "JMP": #Means the OPERAND is either an address number or a label
             try:
                 operand = int(line[1]) #Checking to see if the operand is a number
@@ -73,7 +73,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                 for row in self.symbolTable:
                     if row == line[1]: #Means our label has been defined before this JMP opcode, and so it exists
                         pointerExists = True
-                        pointerToAdd = self.symbolTable[label] #Assigns the current label's pointer to the table
+                        pointerToAdd = self.symbolTable[line[1]] #Assigns the current label's pointer to the table
                 if pointerExists:
                     self.RAM[self.RAMpointer] = pointerToAdd
                 else: #Means the label doesn't exist in the symbol table, and so we need to add it.
@@ -107,7 +107,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         # - For each token, increment the RAMpointer variable
         # - Throw the label into the symbol table and keep going until you come across where it's defined
         # - RAMpointer will hold the memory location the label would start at, so we just translate this into hex and throw this into the array
-
+        self.__init__()
+        self.init_RAM()
         for line in tokenList: #Iterating through the list to get each line, held as a tuple
             if len(line) == 3: #Label case
                 self.label(line)

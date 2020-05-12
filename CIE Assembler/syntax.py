@@ -18,8 +18,8 @@ OPCODETOHEXDICT = {  # CONSTANT Dictionary to hold keywords and functions that w
 }
 
 SPECIALOPERANDS = {
-    "ACC",
-    "IX"
+    "ACC": "EE",
+    "IX": "FF"
 }
 
 '''

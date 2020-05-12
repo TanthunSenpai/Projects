@@ -27,5 +27,4 @@ if __name__ == "__main__":
     editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam)
 
 
-
     root.mainloop()
