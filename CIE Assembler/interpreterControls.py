@@ -25,7 +25,6 @@ class InterpreterControls:
         parsed = copy.deepcopy(self.getText())
         ram,s = self.passed(parsed)
         ram = copy.deepcopy(ram)
-        print(ram)
         self.updateRam(ram)
 
         pass

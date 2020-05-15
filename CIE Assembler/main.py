@@ -22,6 +22,8 @@ if __name__ == "__main__":
     editor = Editor(root,1,0)
     display = Display(root, 1,2)
     errorBar = ErrorBar(root,3,0)
+
+    #Connecting things together
     editor.rep = errorBar.update
     toolBar.assign_numSys(display.numSys)
     editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam)
