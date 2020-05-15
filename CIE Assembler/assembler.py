@@ -4,7 +4,7 @@
 
 import syntax #Importing the dictionaries declared in syntax.py to be used later
 
-class Assembler: #Writing as a class so we can have a separate class for each assembly code file.
+class Assembler: #Writing as a class so we can have a separate class for each assembly code file
     def __init__(self):
         self.symbolTable = {} #Structure of the symbol table will be [[label name, address in memory location]]
         self.RAM = [] #Initalises RAM by default on constructor call
