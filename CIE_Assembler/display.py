@@ -13,12 +13,6 @@ def denHex(x):
     return l
 
 
-
-
-
-
-
-
 class Display:
     def __init__(self, master, r, c):
         self.master = master
