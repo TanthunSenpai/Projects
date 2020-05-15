@@ -1,12 +1,8 @@
 #Purpose of this file: Receive tokens from front-end and turn them into opcodes (in hex) and put them in RAM
 
-#First pass: Fix forward references and build symbol table of names, labels, and offsets, substituting tokens in place of memory locations
-#Second pass: Generate machine code by converting opcodes into machine code (hex codes) and then put this into RAM
-#Typically, forward references are fixed in the second pass due to variable instruction sizes (e.g. even though all instructions are 2 bytes, a few may be 3 bytes, and you'd need to account for this)
+#Can do everything in 1 pass, so no longer using 2 pass model
 
-#Update: Can do everything in 1 pass, so no longer using 2 pass model
-
-import syntax #Importing the dictionaries declared in syntax.py to be used later (may be useful, not sure yet)
+import syntax #Importing the dictionaries declared in syntax.py to be used later
 
 class Assembler: #Writing as a class so we can have a separate class for each assembly code file.
     def __init__(self):
@@ -31,9 +27,9 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         print(self.symbolTable)
 
     def label(self, line): #Note: Labels will be replaced with a hex code pointing to it's memory location in memory
-        #The line passed in will be a label, followed by an opcode and an operand
+        #The line passed in will be a label, followed by an opcode and/or an operand
         #For label case, we just place the label and it's location in memory into the symbol table
-        #The rest of the label will be a regular opcode case, and so we can just add these into RAM
+        #The rest of the label will be a regular or special opcode case, and so we can just add these into RAM
         label = line.pop(0)
         exists = False #Temporary variable to check if the label exists in the symbol table
         for item in self.symbolTable:
@@ -105,7 +101,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         #Solving forward references approach:
         # - Start from the first token, work down until you come across a label
         # - For each token, increment the RAMpointer variable
-        # - Throw the label into the symbol table and keep going until you come across where it's defined
+        # - Throw the label into the symbol table with some symbol as the address, and keep going until you come across where it's defined
         # - RAMpointer will hold the memory location the label would start at, so we just translate this into hex and throw this into the array
         self.__init__()
         self.init_RAM()
@@ -121,7 +117,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                 self.specialOpcode(line)
         return self.RAM, self.symbolTable
 
-
+    def checkErrors(self): #Function will return a string in binary to indicate what error flags have been triggered.
+        pass
 
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
@@ -129,4 +126,4 @@ if __name__ == "__main__": #Test input for finished functions
     test.passThrough([["JMP", "OTHERLABEL"],["LDD","174"],["LDD","174"],["LDD","174"],["LDD","174"],["OUT"],["LABELNAME", "END"],["OTHERLABEL", "LDM","252"]]) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
-#Consider bus width, might be useful to model
+#Consider bus width, might be useful to model?
