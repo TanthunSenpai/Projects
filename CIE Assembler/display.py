@@ -3,7 +3,6 @@ try:
 except:
     from tkinter import *
 
-from assembler import *
 import copy
 
 def denHex(x):

@@ -42,5 +42,12 @@ HEXTOFUNCTIONDICT = {
     "2D":END
 }
 
-def LDM():
+a = []
+b = a
+registers = {"acc": }
+HSDJGF[<0A>](pc,ram,registers)
+
+def LDM(pc,ram,registers):
+    pc = pc + 2
+    registers["ACC"] = ram[pc+1]
 '''
