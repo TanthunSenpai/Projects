@@ -127,6 +127,11 @@ class Editor:
             if inSyntax(token):
                 opCodePos = i
                 opCodeNum += 1
+
+        if opCodePos == 0 and len(tokens) > 2:
+            return False, "Too many words in a line"
+
+
         if opCodeNum != 1:
             return False, "This line doesn't do anything"
 
