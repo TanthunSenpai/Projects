@@ -29,7 +29,7 @@ class outBar:
         self.textBar.grid(row = 0, column = 1)
 
         self.clearButton = Button(self.frame,
-                            text = "clear",
+                            text = "Clear",
                             font = self.font,
                             command = self.clearBar,
                             width = 7)
