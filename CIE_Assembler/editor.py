@@ -64,31 +64,29 @@ class Editor:
             for each in line:
                 if ':' in each:
                     line[line.index(each)] = "<" + each[:len(each)-1] + ">"
-                if '#' in each and each[1:].isnumeric():
+                elif '#' in each and each[1:].isnumeric():
                     line[line.index(each)] = int(each[1:])
-                if 'B' in each and each[1:].isnumeric():
+                elif 'B' in each and each[1:].isnumeric():
                     line[line.index(each)] = int(each[1:], 2)
-                if '&' in each:
+                elif '&' in each:
                     line[line.index(each)] = int(each[1:], 16)
-                if each.isnumeric():
+                elif each.isnumeric():
                     line[line.index(each)] = int(each)
+                elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
+                    print(each)
+                    line[line.index(each)] = "<" + each + ">"
 
             valid, msg = self.syntax_analysis(line)
             if not valid:
                 self.report("Error on Line "+ str(i+1) + ": - "+ msg)
                 return False
 
-
-            #Temporary Compatibility Code waiting for laveen's changes
-            for each in line:
-                if isinstance(each,str):
-                    if "<" in each:
-                        line[line.index(each)] = each[1:len(each)-1]
-
             ret.append(line)
 
 
+
         self.report("No error: " + random.choice(cheerMessages))
+        print(ret)
 
         return ret
 
