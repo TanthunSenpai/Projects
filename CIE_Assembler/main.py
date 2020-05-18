@@ -8,6 +8,7 @@ from editor import *
 from display import *
 from errorLine import *
 from assembler import *
+from outBar import *
 
 if __name__ == "__main__":
     root = Tk()
@@ -22,6 +23,7 @@ if __name__ == "__main__":
     editor = Editor(root,1,0)
     display = Display(root, 1,2)
     errorBar = ErrorBar(root,3,0)
+    outBar = outBar(root,4,0)
 
     #Connecting things together
     editor.rep = errorBar.update
