@@ -14,6 +14,7 @@ def denHex(x):
 
 
 class Display:
+    #This is a display widget
     def __init__(self, master, r, c):
         self.master = master
         self.font = ("consolas", 12)
