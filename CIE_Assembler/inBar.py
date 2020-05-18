@@ -11,7 +11,7 @@ class InBar:
         self.frame.grid(row=r, column=c)
         self.fontSize = 12
         self.font = ("Consolas",self.fontSize)
-        self.label = Label(self.frame,text="Input: ",font=self.font,width=5)
+        self.label = Label(self.frame,text="Input: ",font=self.font,width=8)
         self.label.grid(row=0, column=0)
         self.strVar = StringVar()
         self.entry = Entry(self.frame,textvariable=self.strVar,width=29,justify=LEFT)
