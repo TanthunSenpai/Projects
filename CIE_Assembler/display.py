@@ -32,7 +32,6 @@ class Display:
             "IX":"1",
             "ACC":"1A",
             "PC":"0",
-            "CMP":"0"
         }
         self.regArray = {}
         j = 0
@@ -49,7 +48,7 @@ class Display:
         j = 0
         for i in range(256):
             if i%16 == 0:
-                self.lineNums.append(Label(self.ramFrame,text = denHex(j), font = self.font, fg = "blue"))
+                self.lineNums.append(Label(self.ramFrame,text = denHex(j)[1]+"~", font = self.font, fg = "blue"))
                 self.lineNums[j].grid(row = j, column = 0)
                 j+= 1
             self.textArray.append(Label(self.ramFrame, text = self.convFunc(self.ram[i]),font = self.font, width = 4 ))

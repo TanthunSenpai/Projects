@@ -15,7 +15,7 @@ class outBar:
         self.textBar2 = Label(self.frame,
                             text = "Output: ",
                             font = self.font,
-                            width = 7)
+                            width = 8)
         self.textBar2.grid(row = 0 , column = 0)
 
 

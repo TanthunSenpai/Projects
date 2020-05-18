@@ -21,7 +21,7 @@ if __name__ == "__main__":
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root, 0,0)
     editor = Editor(root,1,0)
-    outBar = outBar(root,4,0)
+    outBar = outBar(root,2,1)
     display = Display(root, 1,1)
     errorBar = ErrorBar(root,3,1)
 
