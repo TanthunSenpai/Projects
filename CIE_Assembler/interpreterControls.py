@@ -25,16 +25,20 @@ class InterpreterControls:
         parsed = copy.deepcopy(self.getText())
 
         if parsed:
-            ram,s = self.passed(parsed)
-            ram = copy.deepcopy(ram)
-            self.updateRam(ram)
+            isValid, ram, s, errMsg = self.passed(parsed)
+            if isValid:
+                ram = copy.deepcopy(ram)
+                self.updateRam(ram)
+            else:
+                self.report(errMsg)
+
 
 
         pass
 
-    def assign_Functions(self,getText,passed ,updateRam):
+    def assign_Functions(self,getText,passed ,updateRam,report):
         self.getText = getText
         self.passed = passed
         self.updateRam = updateRam
-
+        self.report = report
         pass
