@@ -100,12 +100,19 @@ class Editor:
     def syntax_analysis(self, tokens):
         opCodePos = -1
         opCodeNum = 0
+        badChars = ["+", "-", "=", "@", "!", "$", "%", "^", "*", "(", ")", "{", "}", "[", "]", ";", "'", ".", ",", "/", '~']
         def inSyntax(token):
             if token in syntax.OPCODETOHEXDICT:
                 return True
 
         if len(tokens) > 3:
             return False, "Too many words in a line"
+
+        for token in tokens:
+            for char in badChars:
+                if isinstance(token, str):
+                    if char in token:
+                        return False, "Bad character"
 
 
         for i,token in enumerate(tokens):
