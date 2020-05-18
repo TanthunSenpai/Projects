@@ -124,11 +124,13 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 
     def checkErrors(self): #Function will return a string in binary to indicate what error flags have been triggered.
         pass
+        # Errors possible:
+        # - JMP to undefined label
 
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "<OTHERLABEL>"],["LDD","174"],["LDD","174"],["LDD","174"],["LDD","174"],["OUT"],["<LABELNAME>", "END"],["<OTHERLABEL>", "LDM","252"]]) #Running the assembler on this sample code
+    test.passThrough([["<LABEL>", "LDD", "150"], ["JMP", "<LABEL>"]]) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?
