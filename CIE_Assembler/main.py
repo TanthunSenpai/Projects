@@ -8,6 +8,7 @@ from editor import *
 from display import *
 from errorLine import *
 from assembler import *
+from outBar import *
 
 if __name__ == "__main__":
     root = Tk()
@@ -20,11 +21,12 @@ if __name__ == "__main__":
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root, 0,0)
     editor = Editor(root,1,0)
-    display = Display(root, 1,2)
-    errorBar = ErrorBar(root,3,0)
+    outBar = outBar(root,2,1)
+    display = Display(root, 1,1)
+    errorBar = ErrorBar(root,3,1)
 
     #Connecting things together
-    editor.rep = errorBar.update
+    editor.report = errorBar.update
     toolBar.assign_numSys(display.numSys)
     editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam)
 

@@ -14,6 +14,7 @@ def denHex(x):
 
 
 class Display:
+    #This is a display widget
     def __init__(self, master, r, c):
         self.master = master
         self.font = ("consolas", 12)
@@ -26,11 +27,11 @@ class Display:
         self.ram = [denHex(0) for i in range(256)] # a list of integers
         self.textArray = [] # a list of label objects
         self.convFunc = lambda x: x
+        self.lineNums = [] # a list containing line number labels in display
         self.registers = {
             "IX":"1",
             "ACC":"1A",
             "PC":"0",
-            "CMP":"0"
         }
         self.regArray = {}
         j = 0
@@ -47,9 +48,12 @@ class Display:
         j = 0
         for i in range(256):
             if i%16 == 0:
-                j += 1
+                self.lineNums.append(Label(self.ramFrame,text = denHex(j)[1]+"~", font = self.font, fg = "blue"))
+                self.lineNums[j].grid(row = j, column = 0)
+                j+= 1
             self.textArray.append(Label(self.ramFrame, text = self.convFunc(self.ram[i]),font = self.font, width = 4 ))
-            self.textArray[i].grid(row = j, column = i%16)
+            self.textArray[i].grid(row = j-1, column = i%16+1)
+
 
 
     def update(self):
@@ -90,13 +94,7 @@ class Display:
 
 if __name__ == "__main__":
     root = Tk()
-    a = Assembler()
-    a.init_RAM() #Creating RAM
-    ram, s = a.passThrough([["JMP", "OTHERLABEL"],["LDD","174"],["LDD","174"],["LDD","174"],["LDD","174"],["OUT"],["LABELNAME", "END"],["OTHERLABEL", "LDM","252"]])
-    r = Display(root,0,0)
-    r.numSys("Hex")
-    r.ram = ram
-    r.update()
+    d = Display(root,0,0)
 
 
 
