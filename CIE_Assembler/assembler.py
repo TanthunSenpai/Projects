@@ -30,6 +30,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         #The line passed in will be a label, followed by an opcode and/or an operand
         #For label case, we just place the label and it's location in memory into the symbol table
         #The rest of the label will be a regular or special opcode case, and so we can just add these into RAM
+
+        line[0] = line[0][1:-1] #Removing < and > signs from the label token
         label = line.pop(0)
         exists = False #Temporary variable to check if the label exists in the symbol table
         for item in self.symbolTable:
@@ -56,15 +58,18 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         else:
             self.regularOpcode(line)
 
-    def regularOpcode(self, line): #Deals with adding OPCODE OPERAND lines to RAM
+    def regularOpcode(self, line): #Deals with adding OPCODE OPERAND or LABEL OPCODE or OPCODE LABEL lines to RAM
         self.RAM[self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]] # First part will always be an opcode
         self.RAMpointer += 1
-        if line[1] in syntax.SPECIALOPERANDS: #Checking if the original line was in the form OPCODE SPECIALOPERAND
-            self.RAM[self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]] #If it was a specal operand, we add the corresponding hex code for that operand (see syntax.py)
-        elif line[0] == "JMP": #Means the OPERAND is either an address number or a label
+        #OPCODE SPECIALOPERAND case
+        if line[1] in syntax.SPECIALOPERANDS:
+            self.RAM[self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]] #If it was a special operand, we add the corresponding hex code for that operand (see syntax.py)
+        #Checking between OPCODE OPERAND and OPCODE LABEL case
+        elif line[0] == "JMP":
             try:
                 operand = int(line[1]) #Checking to see if the operand is a number
-            except: #If the above failed, it must be a label operand
+            except: #OPCODE LABEL case
+                line[1] = line[1][1:-1] #Removing < and > signs from the label token
                 pointerExists = False
                 for row in self.symbolTable:
                     if row == line[1]: #Means our label has been defined before this JMP opcode, and so it exists
@@ -76,10 +81,13 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                     self.RAM[self.RAMpointer] = chr(self.symbol) #Adding symbol to RAM instead
                     self.symbolTable[line[1]] = chr(self.symbol) #Assigning JMP operand i.e. the label to the symbol
                     self.symbol += 1 #Changing to next symbol code
-            else: #Case of JMP operand being a number
+                    
+            else: # JMP NUM case
                 self.RAM[self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
                 if len(self.RAM[self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning
                     self.RAM[self.RAMpointer] = "0" + self.RAM[self.RAMpointer]
+        #OPCODE OPERAND CASE
+
         else: #Means it wasn't a special operand or a JMP opcode, so we just have a regular number
             self.RAM[self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
             if len(self.RAM[self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning
@@ -123,7 +131,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "OTHERLABEL"],["LDD","174"],["LDD","174"],["LDD","174"],["LDD","174"],["OUT"],["LABELNAME", "END"],["OTHERLABEL", "LDM","252"]]) #Running the assembler on this sample code
+    test.passThrough([["JMP", "<OTHERLABEL>"],["LDD","174"],["LDD","174"],["LDD","174"],["LDD","174"],["OUT"],["<LABELNAME>", "END"],["<OTHERLABEL>", "LDM","252"]]) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?

@@ -23,9 +23,12 @@ class InterpreterControls:
 
     def assemble(self):
         parsed = copy.deepcopy(self.getText())
-        ram,s = self.passed(parsed)
-        ram = copy.deepcopy(ram)
-        self.updateRam(ram)
+
+        if parsed:
+            ram,s = self.passed(parsed)
+            ram = copy.deepcopy(ram)
+            self.updateRam(ram)
+
 
         pass
 
