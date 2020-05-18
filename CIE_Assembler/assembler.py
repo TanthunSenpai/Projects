@@ -30,6 +30,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         #The line passed in will be a label, followed by an opcode and/or an operand
         #For label case, we just place the label and it's location in memory into the symbol table
         #The rest of the label will be a regular or special opcode case, and so we can just add these into RAM
+
         line[0] = line[0][1:-1] #Removing < and > signs from the label token
         label = line.pop(0)
         exists = False #Temporary variable to check if the label exists in the symbol table
@@ -80,11 +81,13 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                     self.RAM[self.RAMpointer] = chr(self.symbol) #Adding symbol to RAM instead
                     self.symbolTable[line[1]] = chr(self.symbol) #Assigning JMP operand i.e. the label to the symbol
                     self.symbol += 1 #Changing to next symbol code
+                    
             else: # JMP NUM case
                 self.RAM[self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
                 if len(self.RAM[self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning
                     self.RAM[self.RAMpointer] = "0" + self.RAM[self.RAMpointer]
         #OPCODE OPERAND CASE
+
         else: #Means it wasn't a special operand or a JMP opcode, so we just have a regular number
             self.RAM[self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
             if len(self.RAM[self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning

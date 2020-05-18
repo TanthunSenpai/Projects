@@ -10,6 +10,7 @@ from errorLine import *
 from assembler import *
 from outBar import *
 
+
 if __name__ == "__main__":
     root = Tk()
     root.title("CIE Assembler virtual machine")
@@ -21,6 +22,7 @@ if __name__ == "__main__":
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root, 0,0)
     editor = Editor(root,1,0)
+
     outBar = outBar(root,2,1)
     display = Display(root, 1,1)
     errorBar = ErrorBar(root,3,1)

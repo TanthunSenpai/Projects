@@ -24,8 +24,6 @@ cheerMessages = ["Amazing! you have no errors, I am surprised",
 
 
 
-
-
 def is_valid_operand(s):
     valid = True
     if len(s) > 3:
@@ -167,7 +165,6 @@ class Editor:
 
     def report(self, text):
         print(text)
-
 
 
 if __name__ == "__main__":

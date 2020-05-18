@@ -15,14 +15,13 @@ class ErrorBar:
         self.textBar = Label(self.frame,
                             text = self.text,
                             font = self.font,
-                            fg = "white",
+                            fg = "black",
                             width = 50,
                             justify = LEFT,
-                            wraplength = 550,
-                            bg = "black",
-                            anchor = W
+                            wraplength = 550
                             )
-        self.textBar.grid(row = 0, column = 0, sticky = W)
+        self.textBar.grid(row = 0, column = 0, sticky = S)
+
 
     def update(self, errMsg, *args):
         self.textBar.configure(text = errMsg)
