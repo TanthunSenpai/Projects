@@ -125,9 +125,9 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             elif len(line) == 2: #Regular opcode case
                 if line[0] not in syntax.OPCODETOHEXDICT: #True means the first part of the line is a label
                     self.label(line)
-                else: #Means the line is just a regular opcode
+                else: #False means the line is just a regular opcode
                     self.regularOpcode(line)
-            else: #Special opcode case
+            elif len(line) == 1: #Special opcode case
                 self.specialOpcode(line)
         self.errorMsg = self.checkErrors()
         return self.allOkFlag, self.RAM, self.symbolTable, self.errorMsg
@@ -151,7 +151,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
+    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], [], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?
