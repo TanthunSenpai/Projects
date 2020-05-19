@@ -11,7 +11,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.RAMpointer = 0 #Since RAM is modelled as a 1D list, we only need a single pointer
         #By convention, RAMpointer will point to the next available location in RAM
         self.symbol = 71 #Ascii code to be used in the case of forward references (starting from character G)
-        self.errorFlag = True #By default it is true
+        self.allOkFlag = True #By default it is true as we assume the code is ok.
         self.errorMsg = "" #Error message to be returned after passThrough is called
         self.code = []
 
@@ -27,8 +27,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         print(self.RAM)
         print("\nSymbol Table: ")
         print(self.symbolTable)
-        print(f"\nFunctional code flag status = {self.errorFlag}")
-        if not self.errorFlag:
+        print(f"\nFunctional code flag status = {self.allOkFlag}")
+        if not self.allOkFlag:
             print(f"Error message = {self.errorMsg}")
 
     def label(self, line): #Note: Labels will be replaced with a hex code pointing to it's memory location in memory
@@ -130,7 +130,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             else: #Special opcode case
                 self.specialOpcode(line)
         self.errorMsg = self.checkErrors()
-        return self.errorFlag, self.RAM, self.symbolTable, self.errorMsg
+        return self.allOkFlag, self.RAM, self.symbolTable, self.errorMsg
 
     def checkErrors(self): #Function will return a string in binary to indicate what error flags have been triggered.
         # Errors possible:
@@ -139,7 +139,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             for label in self.symbolTable:
                 x = int(self.symbolTable[label], 16)
         except:
-            self.errorFlag = False #We need to set the flag to be true as an error has been found
+            self.allOkFlag = False #We need to set the flag to be false as an error has been found
             lineNo = 1
             #We now need to find what line the label is on.
             for line in self.code: #Getting each line from the code
