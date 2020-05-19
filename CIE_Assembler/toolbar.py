@@ -34,7 +34,7 @@ class ToolBar:
         self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table")
         self.bars["Tools"].add_command(label = "Frequency")
-        self.bars["About"].add_command(label = "Info")
+        self.bars["About"].add_command(label = "Info", command = self.pop_info)
 
 
 
@@ -70,6 +70,29 @@ class ToolBar:
         pass
 
     def pop_info(self):
+        popup = Tk()
+        popup.title("Info")
+        font1 = ("Times", 12)
+        font2 = ("Consolas",12,"italic")
+        lines = [
+        ("CIE Assembly Virtual Machine",("Times", 14, "bold")),
+        ("Made by the CompSci Gang of OIC",font1),
+        ("Project is led by:",font1),
+        ("Nicholas Mulvey",("Consolas",12,"bold")),
+        ("Dev team:",font1),
+        ("Adi Bozzhanov",font2),
+        ("Laveen Chandnani",font2),
+        ("Tanthun Assawapitiyaporn",font2),
+        ("Martin Lee",font2),
+        ("Version: 0.0",("Times",12,"bold"))
+        ]
+        labels = []
+
+        for i,line in enumerate(lines):
+            labels.append(Label(popup, text = line[0], font = line[1], justify = LEFT))
+            labels[i].grid(row = i, column = 0, sticky = W)
+
+        popup.mainloop()
 
         pass
 
