@@ -72,25 +72,26 @@ class ToolBar:
     def pop_info(self):
         popup = Tk()
         popup.title("Info")
-        font1 = ("Times", 12)
+        font1 = ("Times", 14,"bold")
         font2 = ("Consolas",12,"italic")
+        font3 = ("Times",12)
         lines = [
-        ("CIE Assembly Virtual Machine",("Times", 14, "bold")),
-        ("Made by the CompSci Gang of OIC",font1),
+        ("CIE Assembly Virtual Machine",font1),
+        ("This program is designed to run the assembly code of CIE A-levels specification and aid students in their studies of computing. Made by The CompSciGang of Oxford International College",font3),
         ("Project is led by:",font1),
-        ("Nicholas Mulvey",("Consolas",12,"bold")),
+        ("Nicholas Mulvey",font2),
         ("Dev team:",font1),
-        ("Adi Bozzhanov",font2),
-        ("Laveen Chandnani",font2),
-        ("Tanthun Assawapitiyaporn",font2),
-        ("Martin Lee",font2),
-        ("Version: 0.0",("Times",12,"bold"))
+        ("Adi Bozzhanov - Head of coding",font2),
+        ("Laveen Chandnani - Head of computing",font2),
+        ("Tanthun Assawapitiyaporn - Head of engineering",font2),
+        ("Martin Lee - Head of programming",font2),
+        ("Version: 0.0",font1)
         ]
         labels = []
 
         for i,line in enumerate(lines):
-            labels.append(Label(popup, text = line[0], font = line[1], justify = LEFT))
-            labels[i].grid(row = i, column = 0, sticky = W)
+            labels.append(Label(popup, text = line[0], font = line[1], wraplength = 550))
+            labels[i].grid(row = i, column = 0)
 
         popup.mainloop()
 
