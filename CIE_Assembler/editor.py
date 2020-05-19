@@ -74,7 +74,7 @@ class Editor:
 
                     elif '&' in each and each[1:].isalnum():
                         for ch in each[1:]:
-                            if ord(ch) > ord("F") or ord(ch) < ord("A"):
+                            if (ord(ch) > ord("F") or ord(ch) < ord("A")) and not ch.isnumeric():
                                 self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not hex")
                                 return False
                         line[line.index(each)] = int(each[1:], 16)
@@ -82,7 +82,6 @@ class Editor:
                     elif each.isnumeric():
                         line[line.index(each)] = int(each)
                     elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
-                        print(each)
                         line[line.index(each)] = "<" + each + ">"
 
                 valid, msg = self.syntax_analysis(line)
@@ -120,7 +119,7 @@ class Editor:
     def syntax_analysis(self, tokens):
         opCodePos = -1
         opCodeNum = 0
-        badChars = ["+", "-", "=", "@", "!", "$", "%", "^", "*", "(", ")", "{", "}", "[", "]", ";", "'", ".", ",", "/", '~']
+        badChars = ["+","#","&" ,"-", "=", "@", "!", "$", "%", "^", "*", "(", ")", "{", "}", "[", "]", ";", "'", ".", ",", "/", '~']
         if not tokens:
             return True, None
         def inSyntax(token):
@@ -131,8 +130,12 @@ class Editor:
             return False, "Too many words in a line"
 
         for token in tokens:
-            for char in badChars:
-                if isinstance(token, str):
+            if isinstance(token, str):
+                if token[0] == "<" and token[-1] == ">":
+                    if token[1:len(token)-1] == "B" or not token[1:len(token) -1].isalpha():
+                        return False, "Bad label name"
+
+                for char in badChars:
                     if char in token:
                         return False, "Bad character"
 
@@ -155,6 +158,8 @@ class Editor:
         if opCodePos == 1:
             if not(tokens[0][-1] == ">" and tokens[0][1:len(tokens[0])-1].isalpha() and tokens[0][0] == "<"):
                 return False, "Bad label name"
+
+
 
         if not tokens[opCodePos] in ["IN", "OUT", "END"]:
             if tokens[opCodePos] in ["INC", "DEC"]:
