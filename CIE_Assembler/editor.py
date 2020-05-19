@@ -66,9 +66,19 @@ class Editor:
                     elif '#' in each and each[1:].isnumeric():
                         line[line.index(each)] = int(each[1:])
                     elif 'B' in each and each[1:].isnumeric():
+                        for ch in each[1:]:
+                            if int(ch) > 1:
+                                self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not binary")
+                                return False
                         line[line.index(each)] = int(each[1:], 2)
-                    elif '&' in each:
+
+                    elif '&' in each and each[1:].isalnum():
+                        for ch in each[1:]:
+                            if ord(ch) > ord("F") or ord(ch) < ord("A"):
+                                self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not hex")
+                                return False
                         line[line.index(each)] = int(each[1:], 16)
+
                     elif each.isnumeric():
                         line[line.index(each)] = int(each)
                     elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
