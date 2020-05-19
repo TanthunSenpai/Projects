@@ -59,25 +59,31 @@ class Editor:
 
         for i, l in enumerate(text):
             line = l.strip().split()
-            for each in line:
-                if ':' in each:
-                    line[line.index(each)] = "<" + each[:len(each)-1] + ">"
-                elif '#' in each and each[1:].isnumeric():
-                    line[line.index(each)] = int(each[1:])
-                elif 'B' in each and each[1:].isnumeric():
-                    line[line.index(each)] = int(each[1:], 2)
-                elif '&' in each:
-                    line[line.index(each)] = int(each[1:], 16)
-                elif each.isnumeric():
-                    line[line.index(each)] = int(each)
-                elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
-                    print(each)
-                    line[line.index(each)] = "<" + each + ">"
+            if line:
+                for each in line:
+                    if ':' in each:
+                        line[line.index(each)] = "<" + each[:len(each)-1] + ">"
+                    elif '#' in each and each[1:].isnumeric():
+                        line[line.index(each)] = int(each[1:])
+                    elif 'B' in each and each[1:].isnumeric():
+                        line[line.index(each)] = int(each[1:], 2)
+                    elif '&' in each:
+                        line[line.index(each)] = int(each[1:], 16)
+                    elif each.isnumeric():
+                        line[line.index(each)] = int(each)
+                    elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
+                        print(each)
+                        line[line.index(each)] = "<" + each + ">"
 
-            valid, msg = self.syntax_analysis(line)
-            if not valid:
-                self.report("Error on Line "+ str(i+1) + ": - "+ msg)
-                return False
+                valid, msg = self.syntax_analysis(line)
+                if not valid:
+                    self.report("Error on Line "+ str(i+1) + ": - "+ msg)
+                    return False
+
+                for each in line:
+                    if isinstance(each,str):
+                        if each[0] == "<":
+                            line[line.index(each)] = each[1:len(each)-1]
 
             ret.append(line)
 
@@ -105,6 +111,8 @@ class Editor:
         opCodePos = -1
         opCodeNum = 0
         badChars = ["+", "-", "=", "@", "!", "$", "%", "^", "*", "(", ")", "{", "}", "[", "]", ";", "'", ".", ",", "/", '~']
+        if not tokens:
+            return True, None
         def inSyntax(token):
             if token in syntax.OPCODETOHEXDICT:
                 return True
