@@ -51,7 +51,7 @@ class Editor:
 
 
     def lexical_analysis(self):
-        text = self.textArea.get('0.0', 'end').strip()
+        text = self.textArea.get('0.0', 'end')
         text = text.split("\n")
         ret = []
         error = False
