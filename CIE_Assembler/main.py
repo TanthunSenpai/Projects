@@ -31,7 +31,7 @@ if __name__ == "__main__":
     #Connecting things together
     editor.report = errorBar.update
     toolBar.assign_numSys(display.numSys)
-    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam)
+    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam, errorBar.update)
 
 
     root.mainloop()
