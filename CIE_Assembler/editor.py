@@ -80,6 +80,11 @@ class Editor:
                     self.report("Error on Line "+ str(i+1) + ": - "+ msg)
                     return False
 
+                for each in line:
+                    if isinstance(each,str):
+                        if each[0] == "<":
+                            line[line.index(each)] = each[1:len(each)-1]
+
             ret.append(line)
 
 
