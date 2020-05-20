@@ -15,6 +15,7 @@ def denHex(x):
 
 class Display:
     #This is a display widget
+
     def __init__(self, master, r, c):
         self.master = master
         self.font = ("consolas", 12)
@@ -28,11 +29,11 @@ class Display:
         self.textArray = [] # a list of label objects
         self.convFunc = lambda x: x
         self.lineNums = [] # a list containing line number labels in display
+
         self.registers = {
             "IX":"1",
             "ACC":"1A",
             "PC":"0",
-            "CMP":"0"
         }
         self.regArray = {}
         j = 0
@@ -49,11 +50,12 @@ class Display:
         j = 0
         for i in range(256):
             if i%16 == 0:
-                self.lineNums.append(Label(self.ramFrame,text = denHex(j), font = self.font, fg = "blue"))
+                self.lineNums.append(Label(self.ramFrame,text = denHex(j)[1]+"~", font = self.font, fg = "blue"))
                 self.lineNums[j].grid(row = j, column = 0)
                 j+= 1
             self.textArray.append(Label(self.ramFrame, text = self.convFunc(self.ram[i]),font = self.font, width = 4 ))
             self.textArray[i].grid(row = j-1, column = i%16+1)
+
 
 
 
