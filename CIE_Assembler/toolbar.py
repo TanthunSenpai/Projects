@@ -11,6 +11,7 @@ class ToolBar:
         self.master = master
         self.toolbar = Menu(self.master)
         self.bars = OrderedDict()
+        self.verStr = "None"
 
         self.bars["File"] = Menu(self.toolbar, tearoff = False)
         self.bars["Edit"] = Menu(self.toolbar, tearoff = False)
@@ -23,7 +24,6 @@ class ToolBar:
         self.bars["View"].add_cascade(label = "NumberSystem", menu = self.numSys)
         self.numSys.add_command(label = "Decimal",command =  lambda: self.set_numSys("Dec"))
         self.numSys.add_command(label = "Hexadecimal", command = lambda: self.set_numSys("Hex"))
-
 
 
         for each in self.bars:
@@ -85,6 +85,9 @@ class ToolBar:
 
         pass
 
+    def setVersion(self,ver):
+        self.verStr = ver
+
     def pop_info(self):
         popup = Tk()
         popup.title("Info")
@@ -101,7 +104,7 @@ class ToolBar:
         ("Laveen Chandnani - Head of computing",font2),
         ("Tanthun Assawapitiyaporn - Head of engineering",font2),
         ("Martin Lee - Head of programming",font2),
-        ("Version: 0.0",font1)
+        ("Version: " + self.verStr,font1)
         ]
         labels = []
 
