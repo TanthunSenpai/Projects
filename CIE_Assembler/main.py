@@ -30,7 +30,7 @@ if __name__ == "__main__":
     errorBar = ErrorBar(root,4,1)
 
     #Connecting things together
-    editor.rep = errorBar.update
+    editor.report = errorBar.update
     toolBar.assign_numSys(display.numSys)
     editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam, errorBar.update)
     toolBar.get_text = editor.get_text
