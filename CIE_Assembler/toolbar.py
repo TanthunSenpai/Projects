@@ -39,9 +39,27 @@ class ToolBar:
 
 
 
+    def get_text(self):
+        text = ""
+        return text
 
 
 
+    def save(self):
+
+        self.text =self.get_text()
+
+        #change path
+        path = os.path.abspath("")
+        dir_path = os.path.dirname(os.path.realpath(__file__)) +"\savedFile"
+        os.chdir(dir_path)
+        path = os.path.abspath("./")
+
+        #create file
+        self.fileName =time.strftime("%d-%m-%y_%H-%M-%S",time.localtime())+".txt"
+        self.f = open(self.fileName,"w")
+        self.f.write(self.text)
+        self.f.close()
 
 
     def pop_load(self):
