@@ -183,7 +183,6 @@ class Editor:
 
     def get_text(self):
         text = self.textArea.get('0.0', 'end').strip()
-
         return text
 
     def report(self, text):
@@ -193,7 +192,9 @@ class Editor:
 if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
-    btn = Button(root, text = "test", command = editor.lexical_analysis)
+
+    btn = Button(root, text = "test", command = lambda: editor.get_text())
     btn.grid(row = 0, column = 1)
+
 
     root.mainloop()

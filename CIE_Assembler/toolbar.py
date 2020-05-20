@@ -3,6 +3,8 @@ try:
 except:
     from tkinter import *
 from collections import OrderedDict
+import time
+import os
 
 class ToolBar:
     def __init__(self, master):
@@ -24,12 +26,11 @@ class ToolBar:
 
 
 
-
         for each in self.bars:
             self.toolbar.add_cascade(label = each, menu = self.bars[each])
         self.master.config(menu = self.toolbar)
 
-        self.bars["File"].add_command(label = "Save")
+        self.bars["File"].add_command(label = "Save", command = lambda: self.save())
         self.bars["File"].add_command(label = "Load")
         self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table")
@@ -38,13 +39,28 @@ class ToolBar:
 
 
 
-
+    def get_text(self):
+        text = ""
+        return text
 
 
 
     def save(self):
 
-        pass
+        self.text =self.get_text()
+
+        #change path
+        path = os.path.abspath("")
+        dir_path = os.path.dirname(os.path.realpath(__file__)) +"\savedFile"
+        os.chdir(dir_path)
+        path = os.path.abspath("./")
+
+        #create file
+        self.fileName =time.strftime("%d-%m-%y_%H-%M-%S",time.localtime())+".txt"
+        self.f = open(self.fileName,"w")
+        self.f.write(self.text)
+        self.f.close()
+
 
     def pop_load(self):
         pass
@@ -102,6 +118,7 @@ if __name__ == "__main__":
 
     root = Tk()
     tb = ToolBar(root)
+    #tb.save()
 
 
     root.mainloop()
