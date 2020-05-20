@@ -36,14 +36,14 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             try:
                 labelSymbol = self.symbolTable[label] #Checking if the label exists in the symbol table
             except:
-                address = str(self.RAMpointer)
+                address = hex(self.RAMpointer)
                 if len(address) == 1:
                     address = "0" + address
                 self.symbolTable[label] = address #We need to define it in the symbol table
                 #The fact that this label wasn't defined means there are no symbolic addresses that we need to correct in RAM
             else:
                 #We need to correct symbolic addresses in RAM as it does exist.
-                address = str(self.RAMpointer)
+                address = hex(self.RAMpointer)
                 if len(address) == 1:
                     address = "0" + address
                 self.symbolTable[label] = str(address) #Changing the symbolic address to a numerical one
