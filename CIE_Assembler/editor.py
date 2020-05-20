@@ -166,16 +166,22 @@ class Editor:
                 if not tokens[opCodePos + 1] in ["ACC", "IX"]:
                     return False, "Bad operand"
             elif tokens[opCodePos] in ["LDR", "LDM", "CMP"]:
-                if isinstance(tokens[opCodePos + 1], int):
-                    if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
-                        return False, "Number out of range"
+                if len(tokens) - opCodePos == 2:
+                    if isinstance(tokens[opCodePos + 1], int):
+                        if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
+                            return False, "Number out of range"
+                    else:
+                        return False, "Bad Operand"
                 else:
-                    return False, "Bad Operand"
+                    return False, "Empty operand"
 
             else:
-                if isinstance(tokens[opCodePos + 1], int):
-                    if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
-                        return False, "Number out of range"
+                if len(tokens) - opCodePos == 2:
+                    if isinstance(tokens[opCodePos + 1], int):
+                        if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
+                            return False, "Number out of range"
+                else:
+                    return False, "Empty operand"
 
 
         return True, None
@@ -200,7 +206,7 @@ if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
 
-    btn = Button(root, text = "test", command = lambda: editor.insert_text("jfks;alfjklds"))
+    btn = Button(root, text = "test", command = lambda: editor.lexical_analysis())
     btn.grid(row = 0, column = 1)
     editor.insert_text("asjdf;jsalkf;\n\n\nfkjsadkl;fjkl; sa")
 
