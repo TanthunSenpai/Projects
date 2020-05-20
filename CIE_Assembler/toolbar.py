@@ -32,9 +32,11 @@ class ToolBar:
         self.bars["File"].add_command(label = "Save")
         self.bars["File"].add_command(label = "Load")
         self.bars["Edit"].add_command(label = "Preferences")
-        self.bars["Tools"].add_command(label = "Symbol Table")
+        self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
         self.bars["Tools"].add_command(label = "Frequency")
         self.bars["About"].add_command(label = "Info")
+
+        self.sym = {}
 
 
 
@@ -47,26 +49,42 @@ class ToolBar:
         pass
 
     def pop_load(self):
+
         pass
 
     def set_freq(self):
 
         pass
 
-    def pop_symbol(self):
+    def update_sym(self,sym):
+        self.sym = sym
+
+
+    def pop_symbol(self):  #passing in a func from display in main
+
+
+        keyList = list(self.sym.keys())
+        valList = list(self.sym.values())
+
+        top = Toplevel()
+        top.title("Symbol Table")
+        top.rowconfigure(0,weight=1)
+        top.columnconfigure(0,weight=1)
+        top.columnconfigure(1,weight=1)
+        lab1 = Label(top,text="Symbol Table",font=("Consolas",40),anchor=CENTER,justify=CENTER)
+        lab1.grid(sticky=N+S,columnspan=2)
+        r = 1
+        for i in range(len(keyList)):
+            keyLab = Label(top,text=keyList[i],bd=1,anchor=CENTER,justify=CENTER)
+            keyLab.grid(row=r,column=0,sticky=N+E+S+W)
+            valLab = Label(top,text=valList[i],bd=1,anchor=CENTER,justify=CENTER)
+            valLab.grid(row=r,column=1,sticky=N+E+S+W)
+            r += 1
 
         pass
-
-
 
     def assign_numSys(self,func):
         self.set_numSys = func
-
-        pass
-
-
-    def pop_symbol(self):
-
         pass
 
     def pop_info(self):
