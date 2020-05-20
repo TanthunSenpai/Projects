@@ -39,7 +39,6 @@ class ToolBar:
 
         self.sym = {}
 
-        self.bars["About"].add_command(label = "Info", command = self.pop_info)
 
 
 

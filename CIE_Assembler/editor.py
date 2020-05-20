@@ -168,7 +168,7 @@ class Editor:
             elif tokens[opCodePos] in ["LDR", "LDM", "CMP"]:
                 if len(tokens) - opCodePos == 2:
                     if isinstance(tokens[opCodePos + 1], int):
-                        if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
+                        if not(tokens[opCodePos + 1] >= 0 and tokens[opCodePos+1] < 256):
                             return False, "Number out of range"
                     else:
                         return False, "Bad Operand"
@@ -178,7 +178,7 @@ class Editor:
             else:
                 if len(tokens) - opCodePos == 2:
                     if isinstance(tokens[opCodePos + 1], int):
-                        if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
+                        if not(tokens[opCodePos + 1] >= 0 and tokens[opCodePos+1] < 256):
                             return False, "Number out of range"
                 else:
                     return False, "Empty operand"
