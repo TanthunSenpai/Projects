@@ -10,8 +10,8 @@ class InterpreterControls:
         self.master = master
         self.frame = Frame(master)
         self.frame.grid(row = r, column = c, sticky = W)
-        self.runButton = Button(self.frame,text = "Assemble", command = self.assemble)
-        self.runButton.grid(row = 0, column = 0)
+        self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble)
+        self.assembleButton.grid(row = 0, column = 0)
         self.runButton = Button(self.frame,text = "Run")
         self.runButton.grid(row = 0, column = 1)
         self.stepButton = Button(self.frame,text = "Step")

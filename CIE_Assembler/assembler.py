@@ -11,7 +11,9 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.RAMpointer = 0 #Since RAM is modelled as a 1D list, we only need a single pointer
         #By convention, RAMpointer will point to the next available location in RAM
         self.symbol = 71 #Ascii code to be used in the case of forward references (starting from character G)
-
+        self.allOkFlag = True #By default it is true as we assume the code is ok.
+        self.errorMsg = "" #Error message to be returned after passThrough is called
+        self.code = []
 
     def init_RAM(self): #Using a 256 byte RAM (16 by 16) in the form of a 2D list initialised to 00 in hex
         #Note: Agreed with Adi that he will have to adjust for rows by breaking into blocks of 16
@@ -25,13 +27,15 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         print(self.RAM)
         print("\nSymbol Table: ")
         print(self.symbolTable)
+        print(f"\nFunctional code flag status = {self.allOkFlag}")
+        if not self.allOkFlag:
+            print(f"Error message = {self.errorMsg}")
 
     def label(self, line): #Note: Labels will be replaced with a hex code pointing to it's memory location in memory
         #The line passed in will be a label, followed by an opcode and/or an operand
         #For label case, we just place the label and it's location in memory into the symbol table
         #The rest of the label will be a regular or special opcode case, and so we can just add these into RAM
-
-        line[0] = line[0][1:-1] #Removing < and > signs from the label token
+        #line[0] = line[0][1:-1] #Removing < and > signs from the label token
         label = line.pop(0)
         exists = False #Temporary variable to check if the label exists in the symbol table
         for item in self.symbolTable:
@@ -65,15 +69,16 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         if line[1] in syntax.SPECIALOPERANDS:
             self.RAM[self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]] #If it was a special operand, we add the corresponding hex code for that operand (see syntax.py)
         #Checking between OPCODE OPERAND and OPCODE LABEL case
-        elif line[0] == "JMP":
+        elif line[0] == "JMP": #If this is true, then the line is a JMP statement
+            #We now need to determine if the operand is an address or a label
             try:
-                operand = int(line[1]) #Checking to see if the operand is a number
+                operand = int(line[1]) #Checking to see if the operand is an address
             except: #OPCODE LABEL case
-                line[1] = line[1][1:-1] #Removing < and > signs from the label token
+                #line[1] = line[1][1:-1] #Removing < and > signs from the label token
                 pointerExists = False
                 for row in self.symbolTable:
                     if row == line[1]: #Means our label has been defined before this JMP opcode, and so it exists
-                        pointerExists = True
+                        pointerExists = True #Setting the flag to indicate the label exists in the symbolTable
                         pointerToAdd = self.symbolTable[line[1]] #Assigns the current label's pointer to the table
                 if pointerExists:
                     self.RAM[self.RAMpointer] = pointerToAdd
@@ -81,7 +86,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                     self.RAM[self.RAMpointer] = chr(self.symbol) #Adding symbol to RAM instead
                     self.symbolTable[line[1]] = chr(self.symbol) #Assigning JMP operand i.e. the label to the symbol
                     self.symbol += 1 #Changing to next symbol code
-                    
+
             else: # JMP NUM case
                 self.RAM[self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
                 if len(self.RAM[self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning
@@ -113,27 +118,40 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         # - RAMpointer will hold the memory location the label would start at, so we just translate this into hex and throw this into the array
         self.__init__()
         self.init_RAM()
+        self.code = tokenList
         for line in tokenList: #Iterating through the list to get each line, held as a tuple
             if len(line) == 3: #Label case
                 self.label(line)
             elif len(line) == 2: #Regular opcode case
-                if line[0] not in syntax.OPCODETOHEXDICT: #Means the first part of the line is a label
+                if line[0] not in syntax.OPCODETOHEXDICT: #True means the first part of the line is a label
                     self.label(line)
-                else: #Means the line is just a regular opcode
+                else: #False means the line is just a regular opcode
                     self.regularOpcode(line)
-            else: #Special opcode case
+            elif len(line) == 1: #Special opcode case
                 self.specialOpcode(line)
-        return self.RAM, self.symbolTable
+        self.errorMsg = self.checkErrors()
+        return self.allOkFlag, self.RAM, self.symbolTable, self.errorMsg
 
     def checkErrors(self): #Function will return a string in binary to indicate what error flags have been triggered.
-        pass
         # Errors possible:
         # - JMP to undefined label
+        try:
+            for label in self.symbolTable:
+                x = int(self.symbolTable[label], 16)
+        except:
+            self.allOkFlag = False #We need to set the flag to be false as an error has been found
+            lineNo = 1
+            #We now need to find what line the label is on.
+            for line in self.code: #Getting each line from the code
+                for item in line: #Getting each item from a line
+                    if item == label: #Checking if the label matches the
+                        return f"Error on line {lineNo}: {label} is undefined"
+                lineNo += 1
 
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["<LABEL>", "LDD", "150"], ["JMP", "<LABEL>"]]) #Running the assembler on this sample code
+    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], [], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?

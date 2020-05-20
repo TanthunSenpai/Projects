@@ -12,7 +12,9 @@ from outBar import *
 from inBar import *
 
 
+
 if __name__ == "__main__":
+    VERSION = "0.1"
     root = Tk()
     root.title("CIE Assembler virtual machine")
     root.geometry("1500x800")
@@ -31,11 +33,13 @@ if __name__ == "__main__":
 
     #Connecting things together
     editor.report = errorBar.update
+    toolBar.setVersion(VERSION)
     toolBar.assign_numSys(display.numSys)
 
     editButtons.update_sym = toolBar.update_sym
 
     editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam, errorBar.update)
+    toolBar.get_text = editor.get_text
 
 
 

@@ -51,7 +51,7 @@ class Editor:
 
 
     def lexical_analysis(self):
-        text = self.textArea.get('0.0', 'end').strip()
+        text = self.textArea.get('0.0', 'end').rstrip()
         text = text.split("\n")
         ret = []
         error = False
@@ -59,25 +59,40 @@ class Editor:
 
         for i, l in enumerate(text):
             line = l.strip().split()
-            for each in line:
-                if ':' in each:
-                    line[line.index(each)] = "<" + each[:len(each)-1] + ">"
-                elif '#' in each and each[1:].isnumeric():
-                    line[line.index(each)] = int(each[1:])
-                elif 'B' in each and each[1:].isnumeric():
-                    line[line.index(each)] = int(each[1:], 2)
-                elif '&' in each:
-                    line[line.index(each)] = int(each[1:], 16)
-                elif each.isnumeric():
-                    line[line.index(each)] = int(each)
-                elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
-                    print(each)
-                    line[line.index(each)] = "<" + each + ">"
+            if line:
+                for each in line:
+                    if ':' in each:
+                        line[line.index(each)] = "<" + each[:len(each)-1] + ">"
+                    elif '#' in each and each[1:].isnumeric():
+                        line[line.index(each)] = int(each[1:])
+                    elif 'B' in each and each[1:].isnumeric():
+                        for ch in each[1:]:
+                            if int(ch) > 1:
+                                self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not binary")
+                                return False
+                        line[line.index(each)] = int(each[1:], 2)
 
-            valid, msg = self.syntax_analysis(line)
-            if not valid:
-                self.report("Error on Line "+ str(i+1) + ": - "+ msg)
-                return False
+                    elif '&' in each and each[1:].isalnum():
+                        for ch in each[1:]:
+                            if (ord(ch) > ord("F") or ord(ch) < ord("A")) and not ch.isnumeric():
+                                self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not hex")
+                                return False
+                        line[line.index(each)] = int(each[1:], 16)
+
+                    elif each.isnumeric():
+                        line[line.index(each)] = int(each)
+                    elif not (each in syntax.OPCODETOHEXDICT or each in syntax.SPECIALOPERANDS):
+                        line[line.index(each)] = "<" + each + ">"
+
+                valid, msg = self.syntax_analysis(line)
+                if not valid:
+                    self.report("Error on Line "+ str(i+1) + ": - "+ msg)
+                    return False
+
+                for each in line:
+                    if isinstance(each,str):
+                        if each[0] == "<":
+                            line[line.index(each)] = each[1:len(each)-1]
 
             ret.append(line)
 
@@ -104,7 +119,9 @@ class Editor:
     def syntax_analysis(self, tokens):
         opCodePos = -1
         opCodeNum = 0
-        badChars = ["+", "-", "=", "@", "!", "$", "%", "^", "*", "(", ")", "{", "}", "[", "]", ";", "'", ".", ",", "/", '~']
+        badChars = ["+","#","&" ,"-", "=", "@", "!", "$", "%", "^", "*", "(", ")", "{", "}", "[", "]", ";", "'", ".", ",", "/", '~']
+        if not tokens:
+            return True, None
         def inSyntax(token):
             if token in syntax.OPCODETOHEXDICT:
                 return True
@@ -113,8 +130,12 @@ class Editor:
             return False, "Too many words in a line"
 
         for token in tokens:
-            for char in badChars:
-                if isinstance(token, str):
+            if isinstance(token, str):
+                if token[0] == "<" and token[-1] == ">":
+                    if token[1:len(token)-1] == "B" or not token[1:len(token) -1].isalpha():
+                        return False, "Bad label name"
+
+                for char in badChars:
                     if char in token:
                         return False, "Bad character"
 
@@ -138,21 +159,29 @@ class Editor:
             if not(tokens[0][-1] == ">" and tokens[0][1:len(tokens[0])-1].isalpha() and tokens[0][0] == "<"):
                 return False, "Bad label name"
 
+
+
         if not tokens[opCodePos] in ["IN", "OUT", "END"]:
             if tokens[opCodePos] in ["INC", "DEC"]:
                 if not tokens[opCodePos + 1] in ["ACC", "IX"]:
                     return False, "Bad operand"
             elif tokens[opCodePos] in ["LDR", "LDM", "CMP"]:
-                if isinstance(tokens[opCodePos + 1], int):
-                    if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
-                        return False, "Number out of range"
+                if len(tokens) - opCodePos == 2:
+                    if isinstance(tokens[opCodePos + 1], int):
+                        if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
+                            return False, "Number out of range"
+                    else:
+                        return False, "Bad Operand"
                 else:
-                    return False, "Bad Operand"
+                    return False, "Empty operand"
 
             else:
-                if isinstance(tokens[opCodePos + 1], int):
-                    if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
-                        return False, "Number out of range"
+                if len(tokens) - opCodePos == 2:
+                    if isinstance(tokens[opCodePos + 1], int):
+                        if not(tokens[opCodePos + 1] > 0 and tokens[opCodePos+1] < 256):
+                            return False, "Number out of range"
+                else:
+                    return False, "Empty operand"
 
 
         return True, None
@@ -160,8 +189,14 @@ class Editor:
 
     def get_text(self):
         text = self.textArea.get('0.0', 'end').strip()
-
         return text
+
+    def insert_text(self, text):
+        self.textArea.delete('0.0',END)
+        self.textArea.insert('0.0', text)
+
+
+        pass
 
     def report(self, text):
         print(text)
@@ -170,7 +205,10 @@ class Editor:
 if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
-    btn = Button(root, text = "test", command = editor.lexical_analysis)
+
+    btn = Button(root, text = "test", command = lambda: editor.lexical_analysis())
     btn.grid(row = 0, column = 1)
+    editor.insert_text("asjdf;jsalkf;\n\n\nfkjsadkl;fjkl; sa")
+
 
     root.mainloop()

@@ -1,0 +1,4 @@
+LABEL:	LDD 123
+	INC ACC
+
+	JMP 134
