@@ -10,8 +10,8 @@ class InterpreterControls:
         self.master = master
         self.frame = Frame(master)
         self.frame.grid(row = r, column = c, sticky = W)
-        self.runButton = Button(self.frame,text = "Assemble", command = self.assemble)
-        self.runButton.grid(row = 0, column = 0)
+        self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble)
+        self.assembleButton.grid(row = 0, column = 0)
         self.runButton = Button(self.frame,text = "Run")
         self.runButton.grid(row = 0, column = 1)
         self.stepButton = Button(self.frame,text = "Step")
@@ -20,20 +20,21 @@ class InterpreterControls:
         self.resetButton.grid(row = 0, column = 3)
         self.getText = None
 
+    def update_sym(self,sym):
+        
+        pass
+
 
     def assemble(self):
         parsed = copy.deepcopy(self.getText())
-
         if parsed:
-            isValid, ram, s, errMsg = self.passed(parsed)
+            isValid, ram, sym, errMsg = self.passed(parsed)
+            self.update_sym(sym)
             if isValid:
                 ram = copy.deepcopy(ram)
                 self.updateRam(ram)
             else:
                 self.report(errMsg)
-
-
-
         pass
 
     def assign_Functions(self,getText,passed ,updateRam,report):

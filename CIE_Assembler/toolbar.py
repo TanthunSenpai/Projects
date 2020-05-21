@@ -11,6 +11,7 @@ class ToolBar:
         self.master = master
         self.toolbar = Menu(self.master)
         self.bars = OrderedDict()
+        self.verStr = "None"
 
         self.bars["File"] = Menu(self.toolbar, tearoff = False)
         self.bars["Edit"] = Menu(self.toolbar, tearoff = False)
@@ -25,7 +26,6 @@ class ToolBar:
         self.numSys.add_command(label = "Hexadecimal", command = lambda: self.set_numSys("Hex"))
 
 
-
         for each in self.bars:
             self.toolbar.add_cascade(label = each, menu = self.bars[each])
         self.master.config(menu = self.toolbar)
@@ -33,9 +33,12 @@ class ToolBar:
         self.bars["File"].add_command(label = "Save", command = lambda: self.save())
         self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
         self.bars["Edit"].add_command(label = "Preferences")
-        self.bars["Tools"].add_command(label = "Symbol Table")
+        self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
         self.bars["Tools"].add_command(label = "Frequency")
         self.bars["About"].add_command(label = "Info", command = self.pop_info)
+
+        self.sym = {}
+
 
 
 
@@ -65,6 +68,7 @@ class ToolBar:
 
     def pop_load(self):
 
+<<<<<<< HEAD
         path = os.path.abspath("")
         dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
         os.chdir(dir_path)
@@ -100,26 +104,47 @@ class ToolBar:
 
 
 
+=======
+        pass
+>>>>>>> f913de3a7e9dfcc9da23e9886a3296f12aa10e3e
 
     def set_freq(self):
 
         pass
 
-    def pop_symbol(self):
+    def update_sym(self,sym):
+        self.sym = sym
+
+
+    def pop_symbol(self):  #passing in a func from display in main
+
+
+        keyList = list(self.sym.keys())
+        valList = list(self.sym.values())
+
+        top = Toplevel()
+        top.title("Symbol Table")
+        top.rowconfigure(0,weight=1)
+        top.columnconfigure(0,weight=1)
+        top.columnconfigure(1,weight=1)
+        lab1 = Label(top,text="Symbol Table",font=("Consolas",40),anchor=CENTER,justify=CENTER)
+        lab1.grid(sticky=N+S,columnspan=2)
+        r = 1
+        for i in range(len(keyList)):
+            keyLab = Label(top,text=keyList[i],bd=1,anchor=CENTER,justify=CENTER)
+            keyLab.grid(row=r,column=0,sticky=N+E+S+W)
+            valLab = Label(top,text=valList[i],bd=1,anchor=CENTER,justify=CENTER)
+            valLab.grid(row=r,column=1,sticky=N+E+S+W)
+            r += 1
 
         pass
-
-
 
     def assign_numSys(self,func):
         self.set_numSys = func
-
         pass
 
-
-    def pop_symbol(self):
-
-        pass
+    def setVersion(self,ver):
+        self.verStr = ver
 
     def pop_info(self):
         popup = Toplevel()
@@ -137,7 +162,7 @@ class ToolBar:
         ("Laveen Chandnani - Head of computing",font2),
         ("Tanthun Assawapitiyaporn - Head of engineering",font2),
         ("Martin Lee - Head of programming",font2),
-        ("Version: 0.0",font1)
+        ("Version: " + self.verStr,font1)
         ]
         labels = []
 
