@@ -89,8 +89,10 @@ class ToolBar:
         top.rowconfigure(0,weight=1)
         top.columnconfigure(0,weight=1)
         top.columnconfigure(1,weight=1)
-        lab1 = Label(top,text="Symbol Table",font=("Consolas",30),anchor=CENTER,justify=CENTER)
-        lab1.grid(sticky=N+S,columnspan=2)
+        lab = Label(top,text="Label Names",font=("Consolas",23),bd=1,relief="solid",anchor=CENTER,justify=CENTER)
+        lab.grid(row=0,column=0,sticky=N+S)
+        lab = Label(top,text="Addresses",font=("Consolas",23),bd=1,relief="solid",anchor=CENTER,justify=CENTER)
+        lab.grid(row=0,column=1,sticky=N+S)
         r = 1
         for i in range(len(keyList)):
             keyLab = Label(top,text=keyList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
