@@ -31,7 +31,7 @@ class ToolBar:
         self.master.config(menu = self.toolbar)
 
         self.bars["File"].add_command(label = "Save", command = lambda: self.save())
-        self.bars["File"].add_command(label = "Load")
+        self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
         self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table")
         self.bars["Tools"].add_command(label = "Frequency")
@@ -62,8 +62,44 @@ class ToolBar:
         self.f.close()
 
 
+
     def pop_load(self):
-        pass
+
+        path = os.path.abspath("")
+        dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
+        os.chdir(dir_path)
+        path = os.path.abspath("./")
+
+        popLoad = Toplevel()
+        popLoad.title("Load")
+        v = StringVar()
+
+        for (i,fileName) in enumerate(os.listdir(path)):
+            Radiobutton(popLoad,text = fileName,variable =v, value =fileName,indicatoron = False,width = 50).grid(row =i, column = 0)
+
+        button =Button(popLoad,text ="Load",width= 30,command = lambda:self.load(v.get()))
+        button.grid(row = i+1, column = 0,sticky ="n")
+        popLoad.mainloop()
+
+
+    def load(self,fileName):
+        print("hi")
+        path = os.path.abspath("")
+        dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
+        os.chdir(dir_path)
+        path = os.path.abspath("./")
+
+        self.fileName = fileName
+        self.f = open(self.fileName,"r")
+        self.fileContent = self.f.read()
+        self.writeText(self.fileContent)
+
+    def writeText(self,text):
+        self.text =text
+
+
+
+
 
     def set_freq(self):
 
@@ -86,7 +122,7 @@ class ToolBar:
         pass
 
     def pop_info(self):
-        popup = Tk()
+        popup = Toplevel()
         popup.title("Info")
         font1 = ("Times", 14,"bold")
         font2 = ("Consolas",12,"italic")
@@ -118,7 +154,7 @@ if __name__ == "__main__":
 
     root = Tk()
     tb = ToolBar(root)
-    #tb.save()
+    tb.pop_load()
 
 
     root.mainloop()
