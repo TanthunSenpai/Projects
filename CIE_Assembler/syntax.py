@@ -42,12 +42,62 @@ HEXTOFUNCTIONDICT = {
     "2D":END
 }
 
+def LDD(args):
+
+    make it do stuff
+
+
+ram = [ , , ,ldd ,100 , , , , , , , , ]
+             ^
+             pc
+
+
+!!!
+EVERYTHING IN RAM IS IN HEX
+
+
+!!!
 a = []
 b = a
 registers = {"acc": }
 HSDJGF[<0A>](pc,ram,registers)
 
-def LDM(pc,ram,registers):
-    pc = pc + 2
-    registers["ACC"] = ram[pc+1]
+interpreter:
+    looks at ram[pc]
+    and calls the method
+
+# dictionary that is passed to all functions
+args = {
+    pc - int
+    ram - a list
+    ACC - int
+    IX - int
+    ZMP - bool - comparison flag
+    HLT - bool - halt flag
+    err - string - execution result - default: execution successful
+    
+
+
+}
+
+
+[   , , , , , inc, 12, , , sto, ,jmp ]
+def INC(args):
+
+    ram[pc+1] == "EE"
+        args[ACC] += 1
+    ram[pc+1] == "FF"
+
+    else
+        args[HLT] = True
+
+
+def stubFunc():
+    -update pc
+    (in ldd case pc+= 2)
+    -do stuff
+    (in ldd case:)
+    registers["EE"] = ram[int(ram[pc+1], 16)]
+
+
 '''
