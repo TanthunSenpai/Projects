@@ -203,11 +203,7 @@ if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
 
-<<<<<<< HEAD
     btn = Button(root, text = "test", command = lambda: editor.insert_text())
-=======
-    btn = Button(root, text = "test", command = lambda: editor.lexical_analysis())
->>>>>>> f913de3a7e9dfcc9da23e9886a3296f12aa10e3e
     btn.grid(row = 0, column = 1)
 
 
