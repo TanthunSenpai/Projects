@@ -40,6 +40,7 @@ if __name__ == "__main__":
 
     editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam, errorBar.update)
     toolBar.get_text = editor.get_text
+    toolBar.writeText = editor.insert_text
 
 
 
