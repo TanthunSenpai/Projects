@@ -191,12 +191,9 @@ class Editor:
         text = self.textArea.get('0.0', 'end').strip()
         return text
 
-    def insert_text(self, text):
+    def insert_text(self,text):
         self.textArea.delete('0.0',END)
         self.textArea.insert('0.0', text)
-
-
-        pass
 
     def report(self, text):
         print(text)
@@ -206,9 +203,8 @@ if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
 
-    btn = Button(root, text = "test", command = lambda: editor.lexical_analysis())
+    btn = Button(root, text = "test", command = lambda: editor.insert_text())
     btn.grid(row = 0, column = 1)
-    editor.insert_text("asjdf;jsalkf;\n\n\nfkjsadkl;fjkl; sa")
 
 
     root.mainloop()

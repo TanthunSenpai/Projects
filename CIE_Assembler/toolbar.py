@@ -31,7 +31,7 @@ class ToolBar:
         self.master.config(menu = self.toolbar)
 
         self.bars["File"].add_command(label = "Save", command = lambda: self.save())
-        self.bars["File"].add_command(label = "Load")
+        self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
         self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
         self.bars["Tools"].add_command(label = "Frequency")
@@ -65,9 +65,48 @@ class ToolBar:
         self.f.close()
 
 
+
     def pop_load(self):
 
+
+        path = os.path.abspath("")
+        dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
+        os.chdir(dir_path)
+        path = os.path.abspath("./")
+
+        popLoad = Toplevel()
+        popLoad.title("Load")
+        v = StringVar()
+
+        for (i,fileName) in enumerate(os.listdir(path)):
+            Radiobutton(popLoad,text = fileName,variable =v, value =fileName,indicatoron = False,width = 50).grid(row =i, column = 0)
+
+        button =Button(popLoad,text ="Load",width= 30,command = lambda:self.load(v.get()))
+        button.grid(row = i+1, column = 0,sticky ="n")
+        popLoad.mainloop()
+
+
+    def load(self,fileName):
+        print("hi")
+        path = os.path.abspath("")
+        dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
+        os.chdir(dir_path)
+        path = os.path.abspath("./")
+
+        self.fileName = fileName
+        self.f = open(self.fileName,"r")
+        self.fileContent = self.f.read()
+        self.writeText(self.fileContent)
+
+    def writeText(self,text):
+        self.text =text
+
+
+
+
+
         pass
+
 
     def set_freq(self):
 
@@ -88,13 +127,15 @@ class ToolBar:
         top.rowconfigure(0,weight=1)
         top.columnconfigure(0,weight=1)
         top.columnconfigure(1,weight=1)
-        lab1 = Label(top,text="Symbol Table",font=("Consolas",40),anchor=CENTER,justify=CENTER)
-        lab1.grid(sticky=N+S,columnspan=2)
+        labName = Label(top,text="Label Names",font=("Consolas",23),bd=1,relief="solid",anchor=CENTER,justify=CENTER)
+        labName.grid(row=0,column=0,sticky=N+S)
+        address = Label(top,text="Addresses",font=("Consolas",23),bd=1,relief="solid",anchor=CENTER,justify=CENTER)
+        address.grid(row=0,column=1,sticky=N+S)
         r = 1
         for i in range(len(keyList)):
-            keyLab = Label(top,text=keyList[i],bd=1,anchor=CENTER,justify=CENTER)
+            keyLab = Label(top,text=keyList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
             keyLab.grid(row=r,column=0,sticky=N+E+S+W)
-            valLab = Label(top,text=valList[i],bd=1,anchor=CENTER,justify=CENTER)
+            valLab = Label(top,text=valList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
             valLab.grid(row=r,column=1,sticky=N+E+S+W)
             r += 1
 
@@ -108,7 +149,7 @@ class ToolBar:
         self.verStr = ver
 
     def pop_info(self):
-        popup = Tk()
+        popup = Toplevel()
         popup.title("Info")
         font1 = ("Times", 14,"bold")
         font2 = ("Consolas",12,"italic")
@@ -140,7 +181,7 @@ if __name__ == "__main__":
 
     root = Tk()
     tb = ToolBar(root)
-    #tb.save()
+    tb.pop_load()
 
 
     root.mainloop()
