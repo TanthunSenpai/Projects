@@ -103,10 +103,13 @@ class Display(Canvas):
         colorScheme = ["#008000", "#008B00", "#009900", "#00AF33",
                        "#00C5CD", "#00CD00", "#00CED1", "#00EE76", "#00FA9A", "#00FF66"]
         colorScheme.reverse()
+        #Each color in the colorScheme corresponds to a specific digit from 1 to 9
 
         for i in range(1, 4):
+            #sort numbers by units, then by tens, then by hundreds
             newArr = [[] for i in range(10)]
             for j, each in enumerate(self.arr):
+                #For each number in array put it into the corresponding list in newArr
                 if len(str(each)) >= i:
                     ind = int(str(each)[-i])
                     newArr[ind].append(each)
