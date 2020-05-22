@@ -84,6 +84,18 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         # - If it is, then we replace the label with the address from the symbol table
         # - If it isn't, then we add it to the symbol table with a symbolic address, which will be overwritten once the label definition is found
         #We now need to determine if the operand is an address or a label
+        elif line[0] == "CMP": #For CMP case, we need to tell if the operand is a number or an address, so we implement this as a separate case
+            if line[1][0] == "#": #Immediate addressing case
+                self.RAM[self.RAMpointer] = "00"
+                self.RAMpointer += 1
+                num = hex(int(line[1][1:]))[2:].upper()
+            else: #Direct addressing case
+                self.RAM[self.RAMpointer] = "01"
+                self.RAMpointer += 1
+                num = hex(int(line[1]))[2:].upper()
+            if len(num) == 1:
+                num = "0" + num
+            self.RAM[self.RAMpointer] = num
         else:
             try:
                 operand = int(line[1]) #Checking to see if the operand is a label or an address
@@ -120,7 +132,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.__init__()
         self.init_RAM()
         self.code = tokenList
-        for line in tokenList: #Iterating through the list to get each line, held as a tuple
+        for line in tokenList: #Iterating through the list to get each line, which is held as a sublist
             if len(line) == 3: #LABEL OPCODE OPERAND
                 self.label(line)
             elif len(line) == 2: #LABEL OPCODE or OPCODE OPERAND case
@@ -133,7 +145,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.errorMsg = self.checkErrors()
         return self.allOkFlag, self.RAM, self.symbolTable, self.errorMsg
 
-    def checkErrors(self): #Function will return a string in binary to indicate what error flags have been triggered.
+    def checkErrors(self):
         # Errors possible:
         # - JMP to undefined label
         try:
@@ -152,7 +164,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], [], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
+    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?
