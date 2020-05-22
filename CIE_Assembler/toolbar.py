@@ -76,17 +76,33 @@ class ToolBar:
         popLoad = Toplevel()
         popLoad.title("Load")
         v = StringVar()
+        self.fontSize = 12
+        self.font = ("Consolas",self.fontSize)
 
         for (i,fileName) in enumerate(os.listdir(path)):
-            Radiobutton(popLoad,text = fileName,variable =v, value =fileName,indicatoron = False,width = 50).grid(row =i, column = 0)
+            Radiobutton(popLoad,
+                        text = fileName,
+                        variable =v,
+                        value =fileName,
+                        indicatoron = False,
+                        width = 50,
+                        font = self.font,
+                        borderwidth = 3,
+                        activeforeground = "green",
+                        ).grid(row =i, column = 0)
 
-        button =Button(popLoad,text ="Load",width= 30,command = lambda:self.load(v.get()))
+        button =Button(popLoad,
+                       text ="Load",
+                       width= 30,
+                       font = self.font,
+                       borderwidth =5,
+                       command = lambda:self.load(v.get())
+                       )
         button.grid(row = i+1, column = 0,sticky ="n")
         popLoad.mainloop()
 
 
     def load(self,fileName):
-        print("hi")
         path = os.path.abspath("")
         dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
         os.chdir(dir_path)
@@ -158,7 +174,7 @@ class ToolBar:
         ("Dev team:",font1),
         ("Adi Bozzhanov - Head of coding",font2),
         ("Laveen Chandnani - Head of computing",font2),
-        ("Tanthun Assawapitiyaporn - Head of engineering",font2),
+        ("Tanthun Assawapitiyaporn - Just a random and lonely guy",font2),
         ("Martin Lee - Head of programming",font2),
         ("Version: " + self.verStr,font1)
         ]
@@ -177,7 +193,6 @@ if __name__ == "__main__":
 
     root = Tk()
     tb = ToolBar(root)
-    tb.pop_load()
 
 
     root.mainloop()
