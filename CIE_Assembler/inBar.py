@@ -19,8 +19,14 @@ class InBar:
         self.enterButton = Button(self.frame,text="Enter",font=self.font,width=7,command=self.enterInput)
         self.enterButton.grid(row=0,column=2)
 
+    def passInput(self,input):  #stub function for syntax.py
+        pass
+
     def enterInput(self):
-        return print(self.strVar.get())
+        input = self.strVar.get()
+        print(input)
+        self.passInput(input)   #stub function
+
 
 
 if __name__ == "__main__":
