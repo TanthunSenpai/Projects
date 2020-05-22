@@ -68,10 +68,6 @@ class ToolBar:
 
     def pop_load(self):
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 01aa1cea4f6f95bcaf1d09e0adb1311d85558216
         path = os.path.abspath("")
         dir_path = os.path.dirname(os.path.realpath(__file__)) +"/Files"
         os.chdir(dir_path)
@@ -107,12 +103,6 @@ class ToolBar:
 
 
 
-<<<<<<< HEAD
-=======
-
-        pass
-
->>>>>>> 01aa1cea4f6f95bcaf1d09e0adb1311d85558216
 
     def set_freq(self):
 

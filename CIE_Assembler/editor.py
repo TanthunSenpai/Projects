@@ -35,19 +35,37 @@ class Editor:
     def __init__(self, master, r, c):
         self.master = master
         self.frame = Frame(self.master)
+        self.frame.grid(row=r, column=c)
         self.fontSize = 14
         self.font = ("Consolas", self.fontSize)
-        self.frame.grid(row=r, column=c)
+        self.lineList = [1]
+
         self.scrollBar = Scrollbar(self.frame, orient=VERTICAL)
         self.scrollBar.pack(side=RIGHT, fill=Y)
+        self.scrollBar.config(command =self.yview)
+        self.numLine = Listbox(self.frame,
+                               width = 3,
+                               height= 25,
+                               font = self.font,
+                               yscrollcommand =self.scrollBar.set
+                               )
+        self.numLine.pack(side = LEFT)
+
         self.textArea = Text(self.frame,
                             width=40,
                             height=25,
                             font=self.font,
-                            yscrollcommand=self.scrollBar.set
+                            yscrollcommand=self.scrollBar.set,
+                            spacing1 =1
                             )
         self.textArea.pack(side=LEFT)
-        self.scrollBar.config(command=self.textArea.yview)
+
+
+        self.textArea.bind("<Key>",self.update_numLine)
+
+    def yview(self, *args):
+        self.numLine.yview(*args)
+        self.textArea.yview(*args)
 
 
     def lexical_analysis(self):
@@ -198,16 +216,28 @@ class Editor:
     def report(self, text):
         print(text)
 
+    def update_lineList(self):
+        self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])
+        if self.endLineNo > max(self.lineList):
+            self.lineList.append(self.endLineNo)
+        elif self.endLineNo < max(self.lineList):
+            self.lineList.remove(self.endLineNo+1)
+
+    def update_numLine(self,event):
+        self.update_lineList()
+        self.numLine.delete(0,END)
+        for item in self.lineList:
+            self.numLine.insert(END,item)
+
+
+
+
 
 if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
 
-<<<<<<< HEAD
-    btn = Button(root, text = "test", command = lambda: editor.lexical_analysis())
-=======
-    btn = Button(root, text = "test", command = lambda: editor.insert_text())
->>>>>>> 01aa1cea4f6f95bcaf1d09e0adb1311d85558216
+    btn = Button(root, text = "test", command = lambda: editor.update_numLine())
     btn.grid(row = 0, column = 1)
 
 
