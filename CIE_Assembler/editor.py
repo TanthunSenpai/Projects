@@ -38,8 +38,6 @@ class Editor:
         self.frame.grid(row=r, column=c)
         self.fontSize = 14
         self.font = ("Consolas", self.fontSize)
-        self.lineList = [1]
-
         self.scrollBar = Scrollbar(self.frame, orient=VERTICAL)
         self.scrollBar.pack(side=RIGHT, fill=Y)
         self.scrollBar.config(command =self.yview)
@@ -215,19 +213,9 @@ class Editor:
 
     def report(self, text):
         print(text)
-    """
-    def update_lineList(self):
-        print(self.textArea.index("end"))
-        self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])-1
-        if self.endLineNo > max(self.lineList):
-            self.lineList.append(self.endLineNo)
-        elif self.endLineNo < max(self.lineList):
-            self.lineList.remove(self.endLineNo+1)"""
 
     def update_numLine(self,event):
-        #self.update_lineList()
         self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])-1
-        print(self.endLineNo)
         self.numLine.delete(0,END)
         for lineNum in range(self.endLineNo):
             self.numLine.insert(END,lineNum+1)

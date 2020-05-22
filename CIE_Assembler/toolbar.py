@@ -174,7 +174,7 @@ class ToolBar:
         ("Dev team:",font1),
         ("Adi Bozzhanov - Head of coding",font2),
         ("Laveen Chandnani - Head of computing",font2),
-        ("Tanthun Assawapitiyaporn - Just a random and lonely guy",font2),
+        ("Tanthun Assawapitiyaporn - Just a random and lonely boi",font2),
         ("Martin Lee - Head of programming",font2),
         ("Version: " + self.verStr,font1)
         ]
