@@ -38,8 +38,6 @@ class Editor:
         self.frame.grid(row=r, column=c)
         self.fontSize = 14
         self.font = ("Consolas", self.fontSize)
-        self.lineList = [1]
-
         self.scrollBar = Scrollbar(self.frame, orient=VERTICAL)
         self.scrollBar.pack(side=RIGHT, fill=Y)
         self.scrollBar.config(command =self.yview)
@@ -67,9 +65,6 @@ class Editor:
         self.numLine.yview(*args)
         self.textArea.yview(*args)
 
-    def yview2(self,*args):
-        self.numLine.yview(*args)
-        self.scrollBar.set
 
     def lexical_analysis(self):
         text = self.textArea.get('0.0', 'end').rstrip()
