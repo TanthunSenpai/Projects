@@ -67,6 +67,9 @@ class Editor:
         self.numLine.yview(*args)
         self.textArea.yview(*args)
 
+    def yview2(self,*args):
+        self.numLine.yview(*args)
+        self.scrollBar.set
 
     def lexical_analysis(self):
         text = self.textArea.get('0.0', 'end').rstrip()
@@ -215,19 +218,9 @@ class Editor:
 
     def report(self, text):
         print(text)
-    """
-    def update_lineList(self):
-        print(self.textArea.index("end"))
-        self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])-1
-        if self.endLineNo > max(self.lineList):
-            self.lineList.append(self.endLineNo)
-        elif self.endLineNo < max(self.lineList):
-            self.lineList.remove(self.endLineNo+1)"""
 
     def update_numLine(self,event):
-        #self.update_lineList()
         self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])-1
-        print(self.endLineNo)
         self.numLine.delete(0,END)
         for lineNum in range(self.endLineNo):
             self.numLine.insert(END,lineNum+1)
