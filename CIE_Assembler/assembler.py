@@ -15,10 +15,10 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.errorMsg = "" #Error message to be returned after passThrough is called
         self.code = []
         self.args = { #Dictionary that holds all arguments needed
-            "PC": 0, #Program counter
+            "PC": "00", #Program counter
             "RAM": [], #State of RAM
-            "ACC": 0, #Accumulator
-            "IX": 0, #Index register
+            "ACC": "00", #Accumulator
+            "IX": "00", #Index register
             "ZMP": False, #Comparison flag
             "halt": False, #Halt flag
             "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.

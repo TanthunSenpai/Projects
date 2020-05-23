@@ -1,18 +1,10 @@
 import syntax #Needed to access the HEXTOFUNCTIONDICT dictionary
 
 class Interpreter:
-    def __init__(self, currentRAM, master, runFreq):
+    def __init__(self, currentRAM, master, runFreq, args):
         self.master = master
         self.runFreq = runFreq
-        self.args = { #Dictionary that holds all arguments needed
-            "PC": "00", #Program counter
-            "RAM": currentRAM, #State of RAM
-            "ACC": "00", #Accumulator
-            "IX": "00", #Index register
-            "ZMP": False, #Comparison flag
-            "halt": False, #Halt flag
-            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.
-            }
+        self.args = args
 
     def execute(self, stepFlag):
         if self.args["RAM"][self.args["PC"]] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
