@@ -11,8 +11,6 @@ class Interpreter:
         if self.args["RAM"][int(self.args["PC"],16)] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
             if not self.args["halt"]: #Checking if this opcode can be executed in the first place
                 syntax.HEXTOFUNCTIONDICT[self.args["RAM"][int(self.args["PC"], 16)]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
-
-
                 self.updateArgs(self.args) #Returning updated arguments after the execution
                 if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
                     self.master.after(self.runFreq, lambda: self.execute(stepFlag))
