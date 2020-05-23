@@ -56,7 +56,12 @@ def stubFunc(args):
     registers["EE"] = "RAM"[int("RAM"[pc+1], 16)]
 """
 
-
+def denHex(x):
+    # Converts a denary integer into a formatted hexadecimal string
+    l =  hex(x)[2:].upper()
+    if len(l) == 1:
+        l = "0" + l
+    return l
 
 def LDM(args):
     args["ACC"] = denHex(int(args["RAM"][(int(args["PC"],16)+1)%256],16)%256)  #in hex string
