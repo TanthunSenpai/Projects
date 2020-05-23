@@ -14,7 +14,7 @@ class Interpreter:
             "errorMsg": "Execution successful" #Error message to be given out in the case of a flag
             }
 
-    def execute(stepFlag):
+    def execute(self, stepFlag):
         if self.args["RAM"][self.args["PC"]] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
             syntax.HEXTOFUNCTIONDICT[self.args["RAM"][self.args["PC"]]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
             if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
@@ -29,20 +29,11 @@ class Interpreter:
         return self.args #We need to return the dictionary in any case
 
 
-    def updateArgs(): #Stub function which will be overwritten by Adi's updateArgs method
+    def updateArgs(self): #Stub function which will be overwritten by Adi's updateArgs method
         print(self.args)
 
-    def stop(): #Method to be called in the event that the stop button is pressed
+    def stop(self): #Method to be called in the event that the stop button is pressed
         self.args["halt"] = True
-
-if __name__ == "__main__": #Debug code
-    import assembler
-    test = Assembler() #Creating assembler object
-    test.init_RAM() #Creating RAM
-    allOkFlag, RAM, symbolTable, errorMsg = test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
-    interpreter = Interpreter(RAM)
-    interpreter.execute()
-
 
 
 """PLAN:

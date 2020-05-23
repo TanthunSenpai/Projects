@@ -18,7 +18,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
     def init_RAM(self): #Using a 256 byte RAM (16 by 16) in the form of a 2D list initialised to 00 in hex
         #Note: Agreed with Adi that he will have to adjust for rows by breaking into blocks of 16
         self.RAM = []
-        for i in range(0,256):
+        for _ in range(0,256):
             self.RAM.append("00") #Initialising each memory location to 00 in hex
         return self.RAM #Return the initialised RAM list
 
@@ -98,7 +98,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             self.RAM[self.RAMpointer] = num
         else:
             try:
-                operand = int(line[1]) #Checking to see if the operand is a label or an address
+                int(line[1]) #Checking to see if the operand is a label or an address
             except: #Operand is a label
                 self.RAM[self.RAMpointer] = self.labelCheck(line[1], False)
                 print(self.RAM[self.RAMpointer])
@@ -150,7 +150,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         # - JMP to undefined label
         try:
             for label in self.symbolTable:
-                x = int(self.symbolTable[label], 16) #Checking if all labels now have a numerical address
+                int(self.symbolTable[label], 16) #Checking if all labels now have a numerical address
         except:
             self.allOkFlag = False #We need to set the flag to be false as an error has been found
             lineNo = 1
