@@ -8,7 +8,7 @@ class ErrorBar:
     def __init__(self, master, r, c):
         self.master = master
         self.frame = Frame(master)
-        self.frame.grid(row = r, column = c, sticky = S)
+        self.frame.grid(row = r, column = c, sticky = W)
         self.fontSize = 12
         self.font = ("Consolas", self.fontSize)
         self.text = "Don't worry my friend, you have no errors....... yet"
@@ -18,10 +18,11 @@ class ErrorBar:
                             fg = "WHITE",
                             width = 50,
                             justify = LEFT,
-                            wraplength = 400,
-                            bg = "black"
+                            wraplength = 600,
+                            bg = "black",
+                            anchor = W
                             )
-        self.textBar.grid(row = 0, column = 0, sticky = S)
+        self.textBar.grid(row = 0, column = 0, sticky = W)
 
 
     def update(self, errMsg, *args):

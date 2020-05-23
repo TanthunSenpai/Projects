@@ -19,6 +19,7 @@ if __name__ == "__main__":
     root = Tk()
     root.title("CIE Assembler virtual machine")
     root.geometry("1500x800")
+    root["bg"] = "white"
     root.resizable(False, False)
 
     asem = Assembler()
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     asem.init_RAM()
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root,0,0)
-    displayFrame = Frame(root)
+    displayFrame = Frame(root, bg = "white")
     displayFrame.grid(row = 1, column = 1)
     editor = Editor(root,1,0)
     inputBar = InBar(displayFrame,2,0)

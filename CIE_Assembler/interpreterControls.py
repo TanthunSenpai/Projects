@@ -10,13 +10,13 @@ class InterpreterControls:
         self.master = master
         self.frame = Frame(master)
         self.frame.grid(row = r, column = c, sticky = W)
-        self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble)
+        self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble, bg = "white")
         self.assembleButton.grid(row = 0, column = 0)
-        self.runButton = Button(self.frame,text = "Run", state = "disabled")
+        self.runButton = Button(self.frame,text = "Run", state = "disabled", bg = "white")
         self.runButton.grid(row = 0, column = 1)
-        self.stepButton = Button(self.frame,text = "Step", state = "disabled")
+        self.stepButton = Button(self.frame,text = "Step", state = "disabled", bg = "white")
         self.stepButton.grid(row = 0, column = 2)
-        self.resetButton = Button(self.frame,text = "Reset", state = "disabled", command = self.reset)
+        self.resetButton = Button(self.frame,text = "Reset", state = "disabled", command = self.reset, bg = "white")
         self.resetButton.grid(row = 0, column = 3)
         self.getText = None
 
@@ -46,6 +46,7 @@ class InterpreterControls:
         self.stepButton["state"] = "disabled"
         self.resetButton["state"] = "disabled"
         self.assembleButton["state"] = "normal"
+
 
     def assign_Functions(self,getText,passed ,updateArgs,report):
         self.getText = getText
