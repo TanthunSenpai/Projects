@@ -16,7 +16,7 @@ class InterpreterControls:
         self.runButton.grid(row = 0, column = 1)
         self.stepButton = Button(self.frame,text = "Step", state = "disabled")
         self.stepButton.grid(row = 0, column = 2)
-        self.resetButton = Button(self.frame,text = "Reset", state = "disabled")
+        self.resetButton = Button(self.frame,text = "Reset", state = "disabled", command = self.reset)
         self.resetButton.grid(row = 0, column = 3)
         self.getText = None
 

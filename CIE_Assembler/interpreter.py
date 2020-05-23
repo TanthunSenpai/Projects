@@ -1,7 +1,7 @@
 import syntax #Needed to access the HEXTOFUNCTIONDICT dictionary
 
 class Interpreter:
-    def __init__(self, currentRAM, master, runFreq, args):
+    def __init__(self, master, runFreq, args):
         self.master = master
         self.runFreq = runFreq
         self.args = args
@@ -34,10 +34,10 @@ class Interpreter:
         #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
         self.args = args
 
-    def changeFreq(self, newFreq):  
-        self.runFreq = newFreq 
+    def changeFreq(self, newFreq):
+        self.runFreq = newFreq
 
-    
+
 
 
 """PLAN:

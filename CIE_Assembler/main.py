@@ -10,6 +10,7 @@ from errorLine import *
 from assembler import *
 from outBar import *
 from inBar import *
+from interpreter import *
 
 
 
@@ -21,6 +22,7 @@ if __name__ == "__main__":
     root.resizable(False, False)
 
     asem = Assembler()
+    interpreter = Interpreter(root,1,asem.args)
     asem.init_RAM()
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root,0,0)
