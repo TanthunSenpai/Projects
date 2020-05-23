@@ -4,7 +4,6 @@ class Interpreter:
     def __init__(self, currentRAM, master, runFreq):
         self.master = master
         self.runFreq = runFreq
-        self.initialRAM = currentRAM
         self.args = { #Dictionary that holds all arguments needed
             "PC": 0, #Program counter
             "RAM": currentRAM, #State of RAM
@@ -12,7 +11,7 @@ class Interpreter:
             "IX": 0, #Index register
             "ZMP": False, #Comparison flag
             "halt": False, #Halt flag
-            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag
+            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.
             }
 
     def execute(self, stepFlag):
@@ -39,17 +38,9 @@ class Interpreter:
     def stop(self): #Method to be called in the event that the stop button is pressed
         self.args["halt"] = True
 
-    def reinitArgs(self): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
+    def reinitArgs(self, args): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
         #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
-        self.args = { #Dictionary that holds all arguments needed
-            "PC": 0, #Program counter
-            "RAM": self.initialRAM, #State of RAM
-            "ACC": 0, #Accumulator
-            "IX": 0, #Index register
-            "ZMP": False, #Comparison flag
-            "halt": False, #Halt flag
-            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag
-            }
+        self.args = args
 
     def changeFreq(self, newFreq):  
         self.runFreq = newFreq 

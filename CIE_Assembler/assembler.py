@@ -7,24 +7,34 @@ import syntax #Importing the dictionaries declared in syntax.py to be used later
 class Assembler: #Writing as a class so we can have a separate class for each assembly code file
     def __init__(self):
         self.symbolTable = {} #Structure of the symbol table will be [[label name, address in memory location]]
-        self.RAM = [] #Initalises RAM by default on constructor call
+        #self.RAM = [] #Initalises RAM by default on constructor call
         self.RAMpointer = 0 #Since RAM is modelled as a 1D list, we only need a single pointer
         #By convention, RAMpointer will point to the next available location in RAM
         self.symbolicAddress = 71 #Ascii code to be used in the case of forward references (starting from character G)
         self.allOkFlag = True #By default it is true as we assume the code is ok.
         self.errorMsg = "" #Error message to be returned after passThrough is called
         self.code = []
+        self.args = { #Dictionary that holds all arguments needed
+            "PC": 0, #Program counter
+            "RAM": [], #State of RAM
+            "ACC": 0, #Accumulator
+            "IX": 0, #Index register
+            "ZMP": False, #Comparison flag
+            "halt": False, #Halt flag
+            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.
+            }
 
     def init_RAM(self): #Using a 256 byte RAM (16 by 16) in the form of a 2D list initialised to 00 in hex
         #Note: Agreed with Adi that he will have to adjust for rows by breaking into blocks of 16
-        self.RAM = []
+        self.args["RAM"] = []
         for _ in range(0,256):
-            self.RAM.append("00") #Initialising each memory location to 00 in hex
-        return self.RAM #Return the initialised RAM list
+            self.args["RAM"].append("00") #Initialising each memory location to 00 in hex
+        return self.args["RAM"] #Return the initialised RAM list
 
     def showContents(self): #TEST FUNCTION TO BE CALLED FOR DEBUGGING PURPOSES
-        print("Current RAM state: ")
-        print(self.RAM)
+        
+        print("Args to be passed to interpreter.py: ")
+        print(self.args)
         print("\nSymbol Table: ")
         print(self.symbolTable)
         print(f"\nFunctional code flag status = {self.allOkFlag}")
@@ -47,9 +57,9 @@ class Assembler: #Writing as a class so we can have a separate class for each as
                 if len(address) == 1:
                     address = "0" + address
                 self.symbolTable[label] = str(address) #Changing the symbolic address to a numerical one
-                for index in range(len(self.RAM)): #Iterating through RAM to find where the symbolic address is used
-                    if self.RAM[index] == labelSymbol: #True means we have found where the symbolic address is used
-                        self.RAM[index] = str(address)
+                for index in range(len(self.args["RAM"])): #Iterating through RAM to find where the symbolic address is used
+                    if self.args["RAM"][index] == labelSymbol: #True means we have found where the symbolic address is used
+                        self.args["RAM"][index] = str(address)
 
         else: #Not a definition, which means we need to return an address of some sort
             if label in self.symbolTable: #Checking if the label exists in the symbol table
@@ -71,12 +81,12 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             self.regularOpcode(line)
 
     def regularOpcode(self, line): #Deals with adding OPCODE OPERAND (operand can be number, specialoperand or label)
-        self.RAM[self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]] # First part will always be an opcode
+        self.args["RAM"][self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]] # First part will always be an opcode
         self.RAMpointer += 1
         #OPCODE SPECIALOPERAND case
         #Special operands are IX and ACC
         if line[1] in syntax.SPECIALOPERANDS:
-            self.RAM[self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]] #If it was a special operand, we add the corresponding hex code for that operand (see syntax.py)
+            self.args["RAM"][self.RAMpointer] = syntax.SPECIALOPERANDS[line[1]] #If it was a special operand, we add the corresponding hex code for that operand (see syntax.py)
         #Checking between OPCODE OPERAND and OPCODE LABEL case
 
         #If the above was not met, then the operand must be an address or a label
@@ -86,32 +96,32 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         #We now need to determine if the operand is an address or a label
         elif line[0] == "CMP": #For CMP case, we need to tell if the operand is a number or an address, so we implement this as a separate case
             if line[1][0] == "#": #Immediate addressing case
-                self.RAM[self.RAMpointer] = "00"
+                self.args["RAM"][self.RAMpointer] = "00"
                 self.RAMpointer += 1
                 num = hex(int(line[1][1:]))[2:].upper()
             else: #Direct addressing case
-                self.RAM[self.RAMpointer] = "01"
+                self.args["RAM"][self.RAMpointer] = "01"
                 self.RAMpointer += 1
                 num = hex(int(line[1]))[2:].upper()
             if len(num) == 1:
                 num = "0" + num
-            self.RAM[self.RAMpointer] = num
+            self.args["RAM"][self.RAMpointer] = num
         else:
             try:
                 int(line[1]) #Checking to see if the operand is a label or an address
             except: #Operand is a label
-                self.RAM[self.RAMpointer] = self.labelCheck(line[1], False)
-                print(self.RAM[self.RAMpointer])
+                self.args["RAM"][self.RAMpointer] = self.labelCheck(line[1], False)
+                print(self.args["RAM"][self.RAMpointer])
                 print(self.symbolTable)
             else: # JMP NUM case
-                self.RAM[self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
-                if len(self.RAM[self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning
-                    self.RAM[self.RAMpointer] = "0" + self.RAM[self.RAMpointer]
+                self.args["RAM"][self.RAMpointer] = hex(int(line[1]))[2:].upper() #Operand must be a number if we reached this point
+                if len(self.args["RAM"][self.RAMpointer]) == 1: #Means we should add an extra 0 at the beginning
+                    self.args["RAM"][self.RAMpointer] = "0" + self.args["RAM"][self.RAMpointer]
 
         self.RAMpointer += 1
 
     def specialOpcode(self, line): #Deals with adding OPCODE lines to RAM
-        self.RAM[self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]]
+        self.args["RAM"][self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]]
         self.RAMpointer += 1
 
 
@@ -143,7 +153,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             elif len(line) == 1: #OPCODE
                 self.specialOpcode(line)
         self.errorMsg = self.checkErrors()
-        return self.allOkFlag, self.RAM, self.symbolTable, self.errorMsg
+        return self.allOkFlag, self.args, self.symbolTable, self.errorMsg
 
     def checkErrors(self):
         # Errors possible:
