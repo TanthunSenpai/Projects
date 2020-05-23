@@ -17,18 +17,20 @@ if __name__ == "__main__":
     VERSION = "0.1"
     root = Tk()
     root.title("CIE Assembler virtual machine")
-    root.geometry("1500x800")
+    root.geometry("1500x900")
     root.resizable(False, False)
 
     asem = Assembler()
     asem.init_RAM()
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root,0,0)
+    displayFrame = Frame(root)
+    displayFrame.grid(row = 1, column = 1)
     editor = Editor(root,1,0)
-    inputBar = InBar(root,3,1)
-    outBar = outBar(root,2,1)
-    display = Display(root,1,1)
-    errorBar = ErrorBar(root,4,1)
+    inputBar = InBar(displayFrame,2,0)
+    outBar = outBar(displayFrame,1,0)
+    display = Display(displayFrame,0,0)
+    errorBar = ErrorBar(displayFrame,3,0)
 
 
     #Connecting things together
@@ -40,10 +42,8 @@ if __name__ == "__main__":
     inStub = inputBar.passInput
     outStub = outBar.out
 
-    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateRam, errorBar.update)
+    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateArgs, errorBar.update)
     toolBar.get_text = editor.get_text
     toolBar.writeText = editor.insert_text
-
-
 
     root.mainloop()

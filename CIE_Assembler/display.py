@@ -31,9 +31,11 @@ class Display:
         self.lineNums = [] # a list containing line number labels in display
 
         self.registers = {
-            "IX":"1",
-            "ACC":"1A",
-            "PC":"0",
+            "PC": "00",
+            "IX":"00",
+            "ACC":"00",
+            "ZMP":"00",
+            "HLT": "00",
         }
         self.regArray = {}
         j = 0
@@ -61,7 +63,7 @@ class Display:
 
     def update(self):
         for reg in self.registers:
-            self.regArray[reg]["text"] = self.convFunc(self.registers[reg])
+            self.regArray[reg]["text"] = self.convFunc(int(self.registers[reg]))
 
         for i,data in enumerate(self.ram):
             self.textArray[i]["text"] = self.convFunc(data)
@@ -85,12 +87,14 @@ class Display:
 
         pass
 
-    def updatePointer(self,ptrName):
-
-        pass
-
-    def updateRam(self,ram_):
-        self.ram = copy.deepcopy(ram_)
+    def updateArgs(self,args):
+        arggs = copy.deepcopy(args)
+        self.registers["ACC"] = arggs["ACC"]
+        self.registers["IX"] = arggs["IX"]
+        self.registers["PC"] = arggs["PC"]
+        self.registers["ZMP"] = arggs["ZMP"]
+        self.registers["HLT"] = arggs["halt"]
+        self.ram = arggs["RAM"]
         self.update()
 
         pass
@@ -98,6 +102,16 @@ class Display:
 if __name__ == "__main__":
     root = Tk()
     d = Display(root,0,0)
+    dic = {
+        "PC" :14,
+        "IX" :3,
+        "ACC" : 13,
+        "ZMP" : 0,
+        "HLT" : 0,
+        "RAM" : ["01" for _ in range(256)]
+
+    }
+    d.updateArgs(dic)
 
 
 
