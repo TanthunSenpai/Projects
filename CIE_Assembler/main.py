@@ -2,6 +2,7 @@ try:
     from Tkinter import *
 except:
     from tkinter import *
+import syntax
 from toolbar import *
 from interpreterControls import *
 from editor import *
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     root.resizable(False, False)
 
     asem = Assembler()
-    interpreter = Interpreter(root,1,asem.args)
+    interpreter = Interpreter(root,1000,asem.args)
     asem.init_RAM()
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root,0,0)
@@ -31,21 +32,24 @@ if __name__ == "__main__":
     displayFrame.grid(row = 1, column = 1, sticky = N)
     editor = Editor(root,1,0)
     inputBar = InBar(displayFrame,2,0)
+
     outBar = outBar(displayFrame,1,0)
     display = Display(displayFrame,0,0)
     errorBar = ErrorBar(displayFrame,3,0)
 
 
     #Connecting things together
+    syntax.outStub = outBar.out
     editor.report = errorBar.update
     toolBar.setVersion(VERSION)
     toolBar.assign_numSys(display.numSys)
 
+    interpreter.updateArgs = display.updateArgs
     editButtons.update_sym = toolBar.update_sym
     inStub = inputBar.passInput
     outStub = outBar.out
 
-    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateArgs, errorBar.update)
+    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateArgs, errorBar.update, interpreter.reinitArgs, interpreter.execute)
     toolBar.get_text = editor.get_text
     toolBar.writeText = editor.insert_text
 

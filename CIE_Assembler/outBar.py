@@ -39,7 +39,8 @@ class outBar:
         '''
 
     def out(self,text):
-        self.textBar.configure(text = text)
+        self.text = self.text + text
+        self.textBar.configure(text = self.text)
 
     def clearBar(self):
         self.textBar.configure(text ="")

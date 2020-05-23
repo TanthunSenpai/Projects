@@ -90,7 +90,7 @@ if __name__ == "__main__":
         "halt" : False,
         "errorMsg": None
     }
-    args["RAM"][0] = "0B"
+    args["RAM"][0] = "0A"
     args["RAM"][1] = "64"
     args["RAM"][2] = "2B"
 

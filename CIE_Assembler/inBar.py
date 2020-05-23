@@ -22,6 +22,16 @@ class InBar:
     def passInput(self,input):  #stub function for syntax.py
         pass
 
+
+    def trigger(self, args):
+        self.args = args
+        self.entry["state"] = "normal"
+        self.label["bg"] = "orange"
+        self.enterButton = Button(self.frame,text="Enter",font=self.font,width=7,command=self.enterInput)
+        self.enterButton.grid(row=0,column=2)
+
+
+
     def enterInput(self):
         input = self.strVar.get()
         print(input)
