@@ -1,4 +1,5 @@
 import syntax #Needed to access the HEXTOFUNCTIONDICT dictionary
+from tkinter import *
 
 class Interpreter:
     def __init__(self, master, runFreq, args):
@@ -7,9 +8,13 @@ class Interpreter:
         self.args = args
 
     def execute(self, stepFlag):
-        if self.args["RAM"][self.args["PC"]] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
-            if not self.args["halt"] and not stepFlag: #Checking if this opcode can be executed in the first place
-                syntax.HEXTOFUNCTIONDICT[self.args["RAM"][self.args["PC"]]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
+        if self.args["RAM"][int(self.args["PC"],16)] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
+            if not self.args["halt"]: #Checking if this opcode can be executed in the first place
+                print(self.args)
+                print("----")
+                syntax.HEXTOFUNCTIONDICT[self.args["RAM"][int(self.args["PC"], 16)]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
+                print(self.args)
+
                 self.updateArgs(self.args) #Returning updated arguments after the execution
                 if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
                     self.master.after(self.runFreq, lambda: self.execute(stepFlag))
@@ -19,6 +24,7 @@ class Interpreter:
             self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
             self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
             self.displayError(self.args["errorMsg"])
+
         return self.args #We need to return the dictionary in any case
 
     def updateArgs(self, args): #Stub function which will be overwritten by Adi's updateArgs method
@@ -74,3 +80,26 @@ interpretMethod(stepFlag):
         #SCHEDULE CALL HERE
 
 """
+
+if __name__ == "__main__":
+    root = Tk()
+    args = {
+        "RAM" : ["00" for i in range(256)],
+        "ACC" : "00",
+        "PC" : "00",
+        "IX" : "00",
+        "ZMP" : False,
+        "halt" : False,
+        "errorMsg": None
+    }
+    args["RAM"][0] = "0B"
+    args["RAM"][1] = "64"
+    args["RAM"][2] = "2B"
+
+
+    inter = Interpreter(root, 1, args)
+    inter.execute(True)
+
+
+
+    root.mainloop()
