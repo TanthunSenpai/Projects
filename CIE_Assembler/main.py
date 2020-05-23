@@ -17,7 +17,7 @@ if __name__ == "__main__":
     VERSION = "0.1"
     root = Tk()
     root.title("CIE Assembler virtual machine")
-    root.geometry("1500x900")
+    root.geometry("1500x800")
     root.resizable(False, False)
 
     asem = Assembler()

@@ -12,11 +12,11 @@ class InterpreterControls:
         self.frame.grid(row = r, column = c, sticky = W)
         self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble)
         self.assembleButton.grid(row = 0, column = 0)
-        self.runButton = Button(self.frame,text = "Run")
+        self.runButton = Button(self.frame,text = "Run", state = "disabled")
         self.runButton.grid(row = 0, column = 1)
-        self.stepButton = Button(self.frame,text = "Step")
+        self.stepButton = Button(self.frame,text = "Step", state = "disabled")
         self.stepButton.grid(row = 0, column = 2)
-        self.resetButton = Button(self.frame,text = "Reset")
+        self.resetButton = Button(self.frame,text = "Reset", state = "disabled")
         self.resetButton.grid(row = 0, column = 3)
         self.getText = None
 
@@ -33,6 +33,10 @@ class InterpreterControls:
             if isValid:
                 args = copy.deepcopy(args)
                 self.updateArgs(args)
+                self.runButton["state"] = "normal"
+                self.stepButton["state"] = "normal"
+                self.resetButton["state"] = "normal"
+                self.assembleButton["state"] = "disabled"
             else:
                 self.report(errMsg)
         pass
