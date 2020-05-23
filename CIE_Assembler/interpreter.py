@@ -25,7 +25,7 @@ class Interpreter:
                 self.master.after(self.runFreq, lambda: self.execute(stepFlag))
         else: #Undefined opcode case
             self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
-            self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args["RAM"][self.args["PC"]]} is undefined."
+            self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
         return self.args #We need to return the dictionary in any case
 
 
