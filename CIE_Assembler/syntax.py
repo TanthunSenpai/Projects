@@ -57,113 +57,112 @@ def stubFunc(args):
 """
 
 def LDM(args):
-    args["ACC"] = args["RAM"][args["PC"]+1]
-    args["PC"] += 2
+    args["ACC"] = int(str(strargs["RAM"][(args["PC"]+1)%256]),16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def LDD(args):
-    addrss = args["RAM"][args["PC"]+1]
-    args["ACC"] = args["RAM"][addrss]
-    args["PC"] += 2
+    addrss = int(str(args["RAM"][(args["PC"]+1)%256]),10)
+    args["ACC"] = int(str(args["RAM"][addrss]),16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def LDI(args):
-    addrss = args["RAM"][args["PC"]+1]
-    value = args["RAM"][addrss]
-    args["ACC"] = value
-    args["PC"] += 2
+    addrss = int(str(args["RAM"][(args["PC"]+1)%256]),10)
+    value = str(args["RAM"][addrss])
+    args["ACC"] = int(value,16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def LDX(args):
-    addrss = args["RAM"][args["PC"]+1]
-    newAddrss = addrss + args["IX"]
-    args["ACC"] = args["RAM"][newAddrss]
-    args["PC"] += 2
+    addrss = int((args["RAM"][(args["PC"]+1)%256]),10)
+    newAddrss = addrss + int(str(args["IX"]),10)
+    args["ACC"] = int(str(args["RAM"][newAddrss]),16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def LDR(args):
-    args["IX"] = args["RAM"][args["PC"]+1]
-    args["PC"] += 2
+    args["IX"] = int(str(args["RAM"][(args["PC"]+1)%256]),16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def STO(args):
-    args["RAM"][args["PC"]+1] = args["ACC"]
-    args["PC"] += 2
+    args["RAM"][(args["PC"]+1)%256] = int(str(args["ACC"]),16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def ADD(args):
-    args["ACC"] += args["RAM"][args["PC"]+1]
-    args["PC"] += 2
+    args["ACC"] = int(str(args["RAM"][(args["PC"]+1)%256]),16)
+    args["PC"] = (args["PC"] + 2) % 256
 
 def INC(args):
-    if args["RAM"][args["PC"]+1] == "EE":
-        args["ACC"] += 1
-    elif args["RAM"][args["PC"]+1] == "FF":
-        args["IX"] += 1
+    if args["RAM"][(args["PC"]+1)%256] == "EE":
+        args["ACC"] = int(str(int(str(args["ACC"]),10) + 1),16) #change ACC from hex to denary for increment then back to hex
+    elif args["RAM"][(args["PC"]+1)%256] == "FF":
+        args["IX"] = int(str(int(str(args["ACC"]),10) + 1) 16)  #change IX from hex to denary for increment then back to hex
     else:
         args["halt"] = True
-        args["errorMsg"] = "Register error: operand is not ACC or IX."
-    args["PC"] += 2
+        args["errorMsg"] = "Register error: register is not ACC or IX."
+    args["PC"] = (args["PC"] + 2) % 256
 
 def DEC(args):
-    if args["RAM"][args["PC"]+1] == "EE":
-        args["ACC"] -= 1
-    elif args["RAM"][args["PC"]+1] == "FF":
-        args["IX"] -= 1
+    if args["RAM"][(args["PC"]+1)%256] == "EE":
+        args["ACC"] = int(str(int(str(args["ACC"]),10) 0 1),16) #change ACC from hex to denar for decrement then back to hex
+    elif args["RAM"][(args["PC"]+1)%256] == "FF":
+        args["IX"] = int(str(int(str(args["ACC"]),10) + 1) 16)  #change IX from hex to denary for decrement then back to hex
     else:
         args["halt"] = True
-        args["errorMsg"] = "Register error: only ACC and IX can be decremented."
-    args["PC"] += 2
+        args["errorMsg"] = "Register error: register is not ACC or IX."
+    args["PC"] = (args["PC"] + 2) % 256
 
 def JMP(args):
-    args["PC"] = args["RAM"][args["PC"]+1]
+    args["PC"] = int(str(args["RAM"][(args["PC"]+1)%256]),10)   #change hex address to denary for PC
 
 def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
     args["ZMP"] = True
-    if args["RAM"][args["PC"]+1] == 0:  #immediate addressing mode
-        num = args["RAM"][args["PC"]+2]
+    if int(args["RAM"][(args["PC"]+1)%256]) == 0:  #immediate addressing mode
+        num = int(str(args["RAM"][args["PC"]+2]),16)    #num is in hex
         if num == args["ACC"]:
             args["ZMP"] = True
         else:
             args["ZMP"] = False
 
-    elif args["RAM"][args["PC"]+1] == 1:   #direct addressing mode
-        addrss = args["RAM"][args["PC"]+2]
-        if args["RAM"][addrss] == args["ACC"]:
+    elif int(args["RAM"][(args["PC"]+1)%256]) == 1:   #direct addressing mode
+        addrss = int(str(args["RAM"][args["PC"]+2]),10) #change hex address to denary
+        if int(str(args["RAM"][addrss]),16) == args["ACC"]: #both numbers are in hex
             args["ZMP"] = True
         else:
             args["ZMP"] = False
     else:   #neither immediate nor direct addressing modes
         args["halt"] = True
         args["errorMsg"] = "Addressing mode error: only immediate or direct addressing modes are allowed"
-    args["PC"] += 3
+    args["PC"] = (args["PC"] + 3) % 256
 
 def JPE(args):
-    addrss = args["RAM"][args["PC"]+1]
-    if args["ZMP"] == True:   #they are equal
-        args["PC"] = addrss
-    else:   #they are not equal, continue the execution without jumping
-        args["PC"] += 2
+    addrss = int(str(args["RAM"][(args["PC"]+1)%256]),10)
+    if args["ZMP"] == True:   #case: equal
+        args["PC"] = addrss #in denary, PC is a pointer
+    else:   #case: not equal, continue.
+        args["PC"] = (args["PC"] + 2) % 256
 
 def JPN(args):
-    addrss = args["RAM"][args["PC"]+1]
-    if args["ZMP"] == False:  #they are not equal
-        args["PC"] = addrss
-    else:   #they are equal, continue the execution without jumping
-        args["PC"] += 2
+    addrss = int(str(args["RAM"][(args["PC"]+1)%256]),10)
+    if args["ZMP"] == False:  #case: not equal
+        args["PC"] = addrss #in denary, PC is a pointer
+    else:   #case: equal, continue.
+        args["PC"] = (args["PC"] + 2) % 256
 
 def inStub(chrcter):
     return chrcter
 
 def IN(args):
     chrcter = inStub(chrcter)
-    args["ACC"] = ord(chrcter)
-    args["PC"] += 1
+    args["ACC"] = int(str(ord(chrcter)),16) #convert ASCII to denary to hex
+    args["PC"] = (args["PC"] + 1) % 256
 
 def outStub(chrcter):
     pass
 
 def OUT(args):
-    chrcter = chr(args["ACC"])
+    chrcter = chr(int(str(args["ACC"]),10)) #convert hex number to denary to ASCII
     outStub(chrcter)
-    args["PC"] += 1
+    args["PC"] = (args["PC"] + 1) % 256
 
 def END(args):
-    print(args["ACC"])
     pass
 
 HEXTOFUNCTIONDICT = {
