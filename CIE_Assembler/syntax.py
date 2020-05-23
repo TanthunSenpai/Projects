@@ -59,62 +59,62 @@ def stubFunc(args):
 
 
 def LDM(args):
-    args["ACC"] = hex(int(args["RAM"][(int(args["PC"],16)+1)%256],16)%256)  #in hex string
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["ACC"] = denhex(int(args["RAM"][(int(args["PC"],16)+1)%256],16)%256)  #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDD(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    args["ACC"] = hex(int(args["RAM"][addrss],16)%256)  #in hex string
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["ACC"] = denhex(int(args["RAM"][addrss],16)%256)  #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDI(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    value = hex(int(args["RAM"][addrss],16)%256)     #in hex string
+    value = denhex(int(args["RAM"][addrss],16)%256)     #in hex string
     args["ACC"] = value     #in hex string
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDX(args):
     addrss = int((args["RAM"][(int(args["PC"],16)+1)%256]),16)  #in denary
     newAddrss = (addrss + int(str(args["IX"]),16)) % 256    #in denary
-    args["ACC"] = hex(int(args["RAM"][newAddrss],16))   #in hex string
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex strting
+    args["ACC"] = denhex(int(args["RAM"][newAddrss],16))   #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex strting
 
 def LDR(args):
-    args["IX"] = hex(int(args["RAM"][(int(args["PC"],16)+1)%256],16))   #in hex string
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["IX"] = denhex(int(args["RAM"][(int(args["PC"],16)+1)%256],16))   #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def STO(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256], 16)   #in denary, pointer
-    args["RAM"][addrss] = hex(int(args["ACC"],16))   #in hex string
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["RAM"][addrss] = denhex(int(args["ACC"],16))   #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def ADD(args):
     value = int(args["RAM"][(int(args["PC"],16)+1)%256],16)     #in denary
-    args["ACC"] = hex((int(args["ACC"], 16) + value) % 256) #in hex denary
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["ACC"] = denhex((int(args["ACC"], 16) + value) % 256) #in hex denary
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def INC(args):
     if args["RAM"][(int(args["PC"],16)+1)%256] == "EE":
-        args["ACC"] = hex((int(args["ACC"],16)+1)%256)  #in hex string
+        args["ACC"] = denhex((int(args["ACC"],16)+1)%256)  #in hex string
     elif args["RAM"][(int(args["PC"],16)+1)%256] == "FF":
-        args["IX"] = hex((int(args["IX"],16)+1)%256)    #in hex string
+        args["IX"] = denhex((int(args["IX"],16)+1)%256)    #in hex string
     else:
         args["halt"] = True
         args["errorMsg"] = "Register error: register is not one of ACC or IX."
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def DEC(args):
     if args["RAM"][(int(args["PC"],16)+1)%256] == "EE":
-        args["ACC"] = hex((int(args["ACC"],16)-1)%256)  #in hex string
+        args["ACC"] = denhex((int(args["ACC"],16)-1)%256)  #in hex string
     elif args["RAM"][(int(args["PC"],16)+1)%256] == "FF":
-        args["IX"] = hex((int(args["IX"],16)-1)%256)    #in hex string
+        args["IX"] = denhex((int(args["IX"],16)-1)%256)    #in hex string
     else:
         args["halt"] = True
         args["errorMsg"] = "Register error: register is not one of ACC or IX."
-    args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def JMP(args):
-    args["PC"] = hex(int(args["RAM"][(int(args["PC"],16)+1)%256],16))   #format hex address to hex string
+    args["PC"] = denhex(int(args["RAM"][(int(args["PC"],16)+1)%256],16))   #format hex address to hex string
 
 def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
     if int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 1:  #immediate addressing mode
@@ -133,29 +133,29 @@ def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
     else:   #neither immediate nor direct addressing modes
         args["halt"] = True
         args["errorMsg"] = "Addressing mode error: only immediate or direct addressing modes are allowed"
-    args["PC"] = hex((int(args["PC"],16) + 3) % 256)    #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 3) % 256)    #in hex string
 
 def JPE(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == True:   #case: equal
         args["PC"] = addrss #in denary, PC is a pointer
     else:   #case: not equal, continue.
-        args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+        args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def JPN(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == False:  #case: not equal
         args["PC"] = addrss     #in denary, PC is a pointer
     else:   #case: equal, continue.
-        args["PC"] = hex((int(args["PC"],16) + 2) % 256)    #in hex string
+        args["PC"] = denhex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def inStub(letter):
     return letter
 
 def IN(args):
     chrcter = inStub(chrcter)
-    args["ACC"] = hex(int(str(ord(chrcter)),16)) #convert ASCII to denary to hex
-    args["PC"] = hex((int(args["PC"],16) + 1) % 256)    #in hex string
+    args["ACC"] = denhex(int(str(ord(chrcter)),16)) #convert ASCII to denary to hex
+    args["PC"] = denhex((int(args["PC"],16) + 1) % 256)    #in hex string
 
 def outStub(chrcter):
     pass
@@ -163,7 +163,7 @@ def outStub(chrcter):
 def OUT(args):
     chrcter = chr(int(args["ACC"],16)) #convert hex number to denary to ASCII
     outStub(chrcter)
-    args["PC"] = hex((int(args["PC"],16) + 1) % 256)    #in hex string
+    args["PC"] = denhex((int(args["PC"],16) + 1) % 256)    #in hex string
 
 def END(args):
     pass
