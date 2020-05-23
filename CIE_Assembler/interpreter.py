@@ -4,6 +4,7 @@ class Interpreter:
     def __init__(self, currentRAM, master, runFreq):
         self.master = master
         self.runFreq = runFreq
+        self.initialRAM = currentRAM
         self.args = { #Dictionary that holds all arguments needed
             "PC": 0, #Program counter
             "RAM": currentRAM, #State of RAM
@@ -16,20 +17,44 @@ class Interpreter:
 
     def execute(self, stepFlag):
         if self.args["RAM"][self.args["PC"]] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
-            syntax.HEXTOFUNCTIONDICT[self.args["RAM"][self.args["PC"]]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
-            if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
-                self.master.after(self.runFreq, lambda: self.execute(stepFlag))
+            if not self.args["halt"] and not stepFlag: #Checking if this opcode can be executed in the first place
+                syntax.HEXTOFUNCTIONDICT[self.args["RAM"][self.args["PC"]]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
+                self.updateArgs(self.args) #Returning updated arguments after the execution
+                if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
+                    self.master.after(self.runFreq, lambda: self.execute(stepFlag))
+            if self.args["halt"]: #In the event that martin has an error on his side
+                self.displayError(self.args["errorMsg"])
         else: #Undefined opcode case
             self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
             self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
+            self.displayError(self.args["errorMsg"])
         return self.args #We need to return the dictionary in any case
 
-
-    def updateArgs(self): #Stub function which will be overwritten by Adi's updateArgs method
+    def updateArgs(self, args): #Stub function which will be overwritten by Adi's updateArgs method
         print(self.args)
+
+    def displayError(self, errorMsg): #Stub function which will be overwritten by Adi's displayError method
+        print(self.args["errorMsg"])
 
     def stop(self): #Method to be called in the event that the stop button is pressed
         self.args["halt"] = True
+
+    def reinitArgs(self): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
+        #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
+        self.args = { #Dictionary that holds all arguments needed
+            "PC": 0, #Program counter
+            "RAM": self.initialRAM, #State of RAM
+            "ACC": 0, #Accumulator
+            "IX": 0, #Index register
+            "ZMP": False, #Comparison flag
+            "halt": False, #Halt flag
+            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag
+            }
+
+    def changeFreq(self, newFreq):  
+        self.runFreq = newFreq 
+
+    
 
 
 """PLAN:
