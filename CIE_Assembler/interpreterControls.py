@@ -50,17 +50,20 @@ class InterpreterControls:
 
     def run(self):
         self.exec(False)
+        self.setInState(True)
 
     def step(self):
         self.exec(True)
+        self.setInState(False)
 
 
 
-    def assign_Functions(self,getText,passed ,updateArgs,report,reinitInterpreter, exec):
+    def assign_Functions(self,getText,passed ,updateArgs,report,reinitInterpreter, exec, inState):
         self.getText = getText
         self.passed = passed
         self.updateArgs = updateArgs
         self.report = report
         self.reinitInterpreter = reinitInterpreter
         self.exec = exec
+        self.setInState = inState
         pass

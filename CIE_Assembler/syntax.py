@@ -158,8 +158,8 @@ def inStub(letter):
     return letter
 
 def IN(args):
-    chrcter = inStub(chrcter)
-    args["ACC"] = denHex(int(str(ord(chrcter)),16)) #convert ASCII to denary to hex
+    inStub(args)
+    args["inFlag"] = True
     args["PC"] = denHex((int(args["PC"],16) + 1) % 256)    #in hex string
 
 def outStub(chrcter):

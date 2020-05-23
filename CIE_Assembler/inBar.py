@@ -3,7 +3,12 @@ try:
 except:
     from tkinter import *
 
-
+def denHex(x):
+    # Converts a denary integer into a formatted hexadecimal string
+    l =  hex(x)[2:].upper()
+    if len(l) == 1:
+        l = "0" + l
+    return l
 class InBar:
     def __init__(self, master, r, c):
         self.master = master
@@ -16,10 +21,12 @@ class InBar:
         self.strVar = StringVar()
         self.entry = Entry(self.frame,textvariable=self.strVar,width=10,justify=LEFT, font = self.font,state = "disabled", bg ="white")
         self.entry.grid(row=0, column=1)
+        self.running = False
         #self.enterButton = Button(self.frame,text="Enter",font=self.font,width=7,command=self.enterInput)
         #self.enterButton.grid(row=0,column=2)
 
-    def passInput(self,input):  #stub function for syntax.py
+    def setInState(self, state):
+        self.running = state
         pass
 
 
@@ -33,14 +40,24 @@ class InBar:
 
 
     def enterInput(self):
-        input = self.strVar.get()
-        print(input)
-        self.passInput(input)   #stub function
+        char = self.strVar.get()
+        self.args["ACC"] = denHex(ord(char))
+        self.args["inFlag"] = False
+        self.enterButton.destroy()
+        self.entry["state"] = "disabled"
+        self.label["bg"] = "white"
+        self.strVar.set("")
+        self.execute(self.running)
+
+
+
+    def execute(self,f):
+        pass
+
+
 
 
 
 if __name__ == "__main__":
     root = Tk()
     inBar = InBar(root,0,0)
-    inBar.enterInput()
-    root.mainloop()

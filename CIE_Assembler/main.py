@@ -40,16 +40,17 @@ if __name__ == "__main__":
 
     #Connecting things together
     syntax.outStub = outBar.out
+    syntax.inStub = inputBar.trigger
     editor.report = errorBar.update
     toolBar.setVersion(VERSION)
     toolBar.assign_numSys(display.numSys)
+    inputBar.execute = interpreter.execute
+
 
     interpreter.updateArgs = display.updateArgs
     editButtons.update_sym = toolBar.update_sym
-    inStub = inputBar.passInput
-    outStub = outBar.out
 
-    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateArgs, errorBar.update, interpreter.reinitArgs, interpreter.execute)
+    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateArgs, errorBar.update, interpreter.reinitArgs, interpreter.execute, inputBar.setInState)
     toolBar.get_text = editor.get_text
     toolBar.writeText = editor.insert_text
 
