@@ -21,6 +21,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             "IX": "00", #Index register
             "ZMP": False, #Comparison flag
             "halt": False, #Halt flag
+            "inFlag": False, #Input flag
             "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.
             }
 
