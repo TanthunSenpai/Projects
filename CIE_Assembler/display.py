@@ -32,19 +32,31 @@ class Display:
 
         self.registers = {
             "PC": "00",
-            "IX": "00",
             "ACC": "00",
+            "IX": "00",
             "ZMP":False,
             "halt": False,
         }
         self.regArray = {}
         j = 0
         for reg in self.registers:
-            self.regArray[reg+str("-label")] = Label(self.regFrame, text = reg, font = self.font, width = 5, bg = "white")
-            self.regArray[reg+str("-label")].grid(row = 0,column = j)
-            self.regArray[reg] = Label(self.regFrame, text = self.convFunc(self.registers[reg]), font = self.font, bg = "white")
-            self.regArray[reg].grid(row = 1 , column = j)
+            if reg == "ZMP" or reg == "halt":
+                if self.registers[reg]:
+                    t = "TRUE"
+                else:
+                    t = "FALSE"
+                self.regArray[reg+str("-label")] = Label(self.regFrame, text = reg, font = self.font, width = 5, bg = "white")
+                self.regArray[reg+str("-label")].grid(row = 0,column = j,padx = 30)
+                self.regArray[reg] = Label(self.regFrame, text = t, font = self.font, bg = "white")
+                self.regArray[reg].grid(row = 1 , column = j)
+            else:
+                self.regArray[reg+str("-label")] = Label(self.regFrame, text = reg, font = self.font, width = 5, bg = "white")
+                self.regArray[reg+str("-label")].grid(row = 0,column = j)
+                self.regArray[reg] = Label(self.regFrame, text = self.convFunc(self.registers[reg]), font = self.font, bg = "white")
+                self.regArray[reg].grid(row = 1 , column = j)
             j+=1
+        self.regArray["PC-label"]["bg"] = "light Blue"
+        self.regArray["ACC-label"]["bg"] = "orange"
 
         self.highlighted = {}
 
@@ -63,7 +75,14 @@ class Display:
 
     def update(self):
         for reg in self.registers:
-            self.regArray[reg]["text"] = self.convFunc(self.registers[reg])
+            if reg == "ZMP" or reg == "halt":
+                if self.registers[reg]:
+                    t = "TRUE"
+                else:
+                    t = "FALSE"
+                self.regArray[reg]["text"] = t
+            else:
+                self.regArray[reg]["text"] = self.convFunc(self.registers[reg])
 
         for i,data in enumerate(self.ram):
             self.textArray[i]["text"] = self.convFunc(data)

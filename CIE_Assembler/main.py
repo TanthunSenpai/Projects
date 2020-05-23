@@ -28,7 +28,7 @@ if __name__ == "__main__":
     toolBar = ToolBar(root)
     editButtons = InterpreterControls(root,0,0)
     displayFrame = Frame(root, bg = "white")
-    displayFrame.grid(row = 1, column = 1)
+    displayFrame.grid(row = 1, column = 1, sticky = N)
     editor = Editor(root,1,0)
     inputBar = InBar(displayFrame,2,0)
     outBar = outBar(displayFrame,1,0)
