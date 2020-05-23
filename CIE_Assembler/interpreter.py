@@ -19,10 +19,6 @@ class Interpreter:
             syntax.HEXTOFUNCTIONDICT[self.args["RAM"][self.args["PC"]]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
             if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
                 self.master.after(self.runFreq, lambda: self.execute(stepFlag))
-        elif self.args["RAM"][self.args["PC"]] == "00": #Blank memory location
-            self.args["RAM"][self.args["PC"]] = self.args["RAM"][self.args["PC"]] + 1
-            if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
-                self.master.after(self.runFreq, lambda: self.execute(stepFlag))
         else: #Undefined opcode case
             self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
             self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
