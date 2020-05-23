@@ -41,6 +41,12 @@ class InterpreterControls:
                 self.report(errMsg)
         pass
 
+    def reset(self):
+        self.runButton["state"] = "disabled"
+        self.stepButton["state"] = "disabled"
+        self.resetButton["state"] = "disabled"
+        self.assembleButton["state"] = "normal"
+
     def assign_Functions(self,getText,passed ,updateArgs,report):
         self.getText = getText
         self.passed = passed
