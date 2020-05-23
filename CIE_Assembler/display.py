@@ -19,11 +19,11 @@ class Display:
     def __init__(self, master, r, c):
         self.master = master
         self.font = ("consolas", 12)
-        self.frame = Frame(self.master)
+        self.frame = Frame(self.master, bg = "white")
         self.frame.grid(row = r, column = c)
-        self.ramFrame = Frame(self.frame, borderwidth = 5, relief = "groove")
+        self.ramFrame = Frame(self.frame, borderwidth = 5, relief = "groove", bg = "white")
         self.ramFrame.grid(row = 1, column = 0)
-        self.regFrame = Frame(self.frame,borderwidth = 5, relief = "groove")
+        self.regFrame = Frame(self.frame,borderwidth = 5, relief = "groove", bg = "white")
         self.regFrame.grid(row = 0, column = 0, sticky = W)
         self.ram = [denHex(0) for i in range(256)] # a list of integers
         self.textArray = [] # a list of label objects
@@ -31,16 +31,18 @@ class Display:
         self.lineNums = [] # a list containing line number labels in display
 
         self.registers = {
-            "IX":"1",
-            "ACC":"1A",
-            "PC":"0",
+            "PC": "00",
+            "IX": "00",
+            "ACC": "00",
+            "ZMP":False,
+            "halt": False,
         }
         self.regArray = {}
         j = 0
         for reg in self.registers:
-            self.regArray[reg+str("-label")] = Label(self.regFrame, text = reg, font = self.font, width = 5)
+            self.regArray[reg+str("-label")] = Label(self.regFrame, text = reg, font = self.font, width = 5, bg = "white")
             self.regArray[reg+str("-label")].grid(row = 0,column = j)
-            self.regArray[reg] = Label(self.regFrame, text = self.convFunc(self.registers[reg]), font = self.font)
+            self.regArray[reg] = Label(self.regFrame, text = self.convFunc(self.registers[reg]), font = self.font, bg = "white")
             self.regArray[reg].grid(row = 1 , column = j)
             j+=1
 
@@ -50,10 +52,10 @@ class Display:
         j = 0
         for i in range(256):
             if i%16 == 0:
-                self.lineNums.append(Label(self.ramFrame,text = denHex(j)[1]+"~", font = self.font, fg = "blue"))
+                self.lineNums.append(Label(self.ramFrame,text = denHex(j)[1]+"~", font = self.font, fg = "blue", bg = "white"))
                 self.lineNums[j].grid(row = j, column = 0)
                 j+= 1
-            self.textArray.append(Label(self.ramFrame, text = self.convFunc(self.ram[i]),font = self.font, width = 4 ))
+            self.textArray.append(Label(self.ramFrame, text = self.convFunc(self.ram[i]),font = self.font, width = 4, bg = "white" ))
             self.textArray[i].grid(row = j-1, column = i%16+1)
 
 
@@ -76,28 +78,51 @@ class Display:
 
         pass
 
-
-    def add_hg(self,tag,ptrs):
-
+    def remove_hg(self,reg):
+        self.textArray[int(self.registers[reg],16)]["bg"] = "white"
         pass
 
-    def remove_hg(self,tag):
-
+    def add_hg(self,reg, clr):
+        self.textArray[int(self.registers[reg],16)]["bg"] = clr
         pass
 
-    def updatePointer(self,ptrName):
 
-        pass
 
-    def updateRam(self,ram_):
-        self.ram = copy.deepcopy(ram_)
+    def updateArgs(self,args):
+        arggs = copy.deepcopy(args)
+        self.remove_hg("PC")
+        self.remove_hg("ACC")
+        for reg in self.registers:
+            self.registers[reg] = arggs[reg]
+        self.add_hg("PC", "light blue")
+        self.add_hg("ACC", "orange")
+        self.ram = arggs["RAM"]
         self.update()
 
         pass
 
+def test(x,args):
+    n = int(args["PC"],16)
+    n += 1
+    args["PC"] = denHex(n)
+    print(denHex(n))
+    x.updateArgs(args)
+
 if __name__ == "__main__":
     root = Tk()
     d = Display(root,0,0)
+    dic = {
+        "PC" :"13",
+        "IX" : "13",
+        "ACC" : "23",
+        "ZMP" : False,
+        "halt" : False,
+        "RAM" : ["01" for _ in range(256)]
+    }
+    d.updateArgs(dic)
+    testBtn = Button(root, text = "test", command = lambda: test(d,dic))
+    testBtn.grid(row = 0, column = 1)
+
 
 
 

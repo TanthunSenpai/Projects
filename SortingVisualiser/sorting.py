@@ -10,7 +10,7 @@ class Display(Canvas):
         super().__init__(master, **kwargs)
         self.arr = [i for i in range(1, 11)]
         self.bars = []
-        self.timeP = 1
+        self.timeP = 0.25
         self.algs = {
             "Bubble Sort": self.bubble,
             "Insertion Sort": self.insertionSort,
@@ -100,12 +100,11 @@ class Display(Canvas):
             self.editBar(ind, self.arr[ind])
 
     def radixSort(self):
-        colorScheme = ["#008000", "#008B00", "#009900", "#00AF33",
-                       "#00C5CD", "#00CD00", "#00CED1", "#00EE76", "#00FA9A", "#00FF66"]
+        colorScheme = ["pink","red", "orange", "yellow", "lime", "green", "lightBlue", "blue", "purple", "magenta"]
         colorScheme.reverse()
         #Each color in the colorScheme corresponds to a specific digit from 1 to 9
-
-        for i in range(1, 4):
+        n = len(str(len(self.arr))) + 1
+        for i in range(1,n):
             #sort numbers by units, then by tens, then by hundreds
             newArr = [[] for i in range(10)]
             for j, each in enumerate(self.arr):
@@ -132,7 +131,7 @@ class Display(Canvas):
                         self.editBar(k, item, "red")
                         time.sleep(self.timeP)
                         self.update()
-                        if i == 3:
+                        if i == n-1:
                             self.editBar(k, item)
                         else:
                             self.editBar(k, item, colorScheme[j])
@@ -260,7 +259,7 @@ class UI(Frame):
 
     def updateSpeed(self, val):
         self.speedLbl["text"] = val
-        self.can.timeP = (0.5)**(int(val) * 2)
+        self.can.timeP = (0.5)**((int(val)) * 2)
 
     def chooseAlg(self):
         self.pop = Toplevel()

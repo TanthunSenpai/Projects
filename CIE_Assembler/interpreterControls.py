@@ -21,25 +21,25 @@ class InterpreterControls:
         self.getText = None
 
     def update_sym(self,sym):
-        
+
         pass
 
 
     def assemble(self):
         parsed = copy.deepcopy(self.getText())
         if parsed:
-            isValid, ram, sym, errMsg = self.passed(parsed)
+            isValid, args, sym, errMsg = self.passed(parsed)
             self.update_sym(sym)
             if isValid:
-                ram = copy.deepcopy(ram)
-                self.updateRam(ram)
+                args = copy.deepcopy(args)
+                self.updateArgs(args)
             else:
                 self.report(errMsg)
         pass
 
-    def assign_Functions(self,getText,passed ,updateRam,report):
+    def assign_Functions(self,getText,passed ,updateArgs,report):
         self.getText = getText
         self.passed = passed
-        self.updateRam = updateRam
+        self.updateArgs = updateArgs
         self.report = report
         pass
