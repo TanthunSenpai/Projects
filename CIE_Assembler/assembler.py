@@ -22,7 +22,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             "ZMP": False, #Comparison flag
             "halt": False, #Halt flag
             "inFlag": False, #Input flag
-            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.
+            "errorMsg": "Execution successful", #Error message to be given out in the case of a flag. By default it is set to be successful.
+            "stop": False #Flag for user stop 
             }
 
     def init_RAM(self): #Using a 256 byte RAM (16 by 16) in the form of a 2D list initialised to 00 in hex

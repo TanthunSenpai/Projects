@@ -17,8 +17,8 @@ class Interpreter:
             if self.args["halt"]: #In the event that martin has an error on his side
                 self.displayError(self.args["errorMsg"])
         else: #Undefined opcode case
-            self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
-            self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
+            self.args["halt"] = True #Setting the halt flag as we have got to an invalid opcode
+            self.args["errorMsg"] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
             self.displayError(self.args["errorMsg"])
 
         return self.args #We need to return the dictionary in any case
@@ -30,7 +30,7 @@ class Interpreter:
         print(self.args["errorMsg"])
 
     def stop(self): #Method to be called in the event that the stop button is pressed
-        self.args["halt"] = True
+        self.args["stop"] = True
 
     def reinitArgs(self, args): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
         #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
