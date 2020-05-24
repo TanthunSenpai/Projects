@@ -146,14 +146,16 @@ def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
 def JPE(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == True:   #case: equal
-        args["PC"] = addrss #in denary, PC is a pointer
+        addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in hex str to int
+        args["PC"] = denHex(addrss)     #in hex str
     else:   #case: not equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def JPN(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == False:  #case: not equal
-        args["PC"] = addrss     #in denary, PC is a pointer
+        addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in hex str to int
+        args["PC"] = denHex(addrss)     #in hex str
     else:   #case: equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
@@ -199,8 +201,8 @@ if __name__ == "__main__":
 
     args = {
         "PC": "00",
-        "RAM": ["00","02","03","0F","0B","00","00","00","00","00","00","00","00","00","00","00"],
-        "ACC": "FF",
+        "RAM": ["00","00","00","04","0B","00","00","00","00","00","00","00","00","00","00","00"],
+        "ACC": "00",
         "IX": "01",
         "ZMP": False,
         "halt": False,
