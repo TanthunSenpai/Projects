@@ -9,12 +9,15 @@ class Interpreter:
 
     def execute(self, stepFlag):
         if self.args["RAM"][int(self.args["PC"],16)] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
-            if not self.args["halt"]: #Checking if this opcode can be executed in the first place
+            if not self.args["halt"] and not self.args["stop"]: #Checking if this opcode can be executed in the first place
                 syntax.HEXTOFUNCTIONDICT[self.args["RAM"][int(self.args["PC"], 16)]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
                 self.updateArgs(self.args) #Returning updated arguments after the execution
-                if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
+                if not stepFlag: #Checking if we can schedule the next call to execute
                     self.master.after(self.runFreq, lambda: self.execute(stepFlag))
-            if self.args["halt"]: #In the event that martin has an error on his side
+            elif self.args["halt"]: #In the event that martin has an error on his side
+                self.displayError(self.args["errorMsg"])
+            elif self.args["stop"]: #If we couldn't execute it, means stop flag was set
+                self.args["errorMsg"] = f"User initiated stop."
                 self.displayError(self.args["errorMsg"])
         else: #Undefined opcode case
             self.args["halt"] = True #Setting the halt flag as we have got to an invalid opcode
