@@ -68,14 +68,16 @@ def LDM(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDD(args):
-    value = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    args["ACC"] = denHex(value)  #in hex string
+    address = int(args["RAM"][(int(args["PC"], 16) + 1) % 256] , 16) 
+    value = args["RAM"][address]
+    args["ACC"] = value  #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDI(args):
-    addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    value = int(args["RAM"][addrss],16)         #in denary, the second address
-    args["ACC"] = denHex(value)     #in hex string
+    address = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
+    secondAddress = int(args["RAM"][address],16) #in denary, the second address
+    value = args["RAM"][secondAddress]
+    args["ACC"] = value     #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDX(args):
@@ -94,7 +96,8 @@ def STO(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def ADD(args):
-    value = int(args["RAM"][(int(args["PC"],16)+1)%256],16)     #in denary
+    address = int(args["RAM"][(int(args["PC"],16)+1)%256],16)     #in denary
+    value = int(args["RAM"][address], 16)
     args["ACC"] = denHex((int(args["ACC"], 16) + value) % 256) #in hex denary
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
