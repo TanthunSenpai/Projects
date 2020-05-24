@@ -34,7 +34,7 @@ def is_valid_operand(s):
 class Editor:
     def __init__(self, master, r, c):
         self.master = master
-        self.frame = Frame(self.master)
+        self.frame = Frame(self.master, bg = "white")
         self.frame.grid(row=r, column=c)
         self.fontSize = 14
         self.font = ("Consolas", self.fontSize)

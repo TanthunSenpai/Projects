@@ -10,36 +10,60 @@ class InterpreterControls:
         self.master = master
         self.frame = Frame(master)
         self.frame.grid(row = r, column = c, sticky = W)
-        self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble)
+        self.assembleButton = Button(self.frame,text = "Assemble", command = self.assemble, bg = "white")
         self.assembleButton.grid(row = 0, column = 0)
-        self.runButton = Button(self.frame,text = "Run")
+        self.runButton = Button(self.frame,text = "Run", state = "disabled", bg = "white", command = self.run)
         self.runButton.grid(row = 0, column = 1)
-        self.stepButton = Button(self.frame,text = "Step")
+        self.stepButton = Button(self.frame,text = "Step", state = "disabled", bg = "white", command = self.step )
         self.stepButton.grid(row = 0, column = 2)
-        self.resetButton = Button(self.frame,text = "Reset")
+        self.resetButton = Button(self.frame,text = "Reset", state = "disabled", command = self.reset, bg = "white")
         self.resetButton.grid(row = 0, column = 3)
         self.getText = None
 
     def update_sym(self,sym):
-        
+
         pass
 
 
     def assemble(self):
         parsed = copy.deepcopy(self.getText())
         if parsed:
-            isValid, ram, sym, errMsg = self.passed(parsed)
+            isValid, args, sym, errMsg = self.passed(parsed)
             self.update_sym(sym)
             if isValid:
-                ram = copy.deepcopy(ram)
-                self.updateRam(ram)
+                args = copy.deepcopy(args)
+                self.reinitInterpreter(args)
+                self.updateArgs(args)
+                self.runButton["state"] = "normal"
+                self.stepButton["state"] = "normal"
+                self.resetButton["state"] = "normal"
+                self.assembleButton["state"] = "disabled"
             else:
                 self.report(errMsg)
         pass
 
-    def assign_Functions(self,getText,passed ,updateRam,report):
+    def reset(self):
+        self.runButton["state"] = "disabled"
+        self.stepButton["state"] = "disabled"
+        self.resetButton["state"] = "disabled"
+        self.assembleButton["state"] = "normal"
+
+    def run(self):
+        self.exec(False)
+        self.setInState(True)
+
+    def step(self):
+        self.exec(True)
+        self.setInState(False)
+
+
+
+    def assign_Functions(self,getText,passed ,updateArgs,report,reinitInterpreter, exec, inState):
         self.getText = getText
         self.passed = passed
-        self.updateRam = updateRam
+        self.updateArgs = updateArgs
         self.report = report
+        self.reinitInterpreter = reinitInterpreter
+        self.exec = exec
+        self.setInState = inState
         pass

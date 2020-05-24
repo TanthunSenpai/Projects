@@ -1,45 +1,44 @@
 import syntax #Needed to access the HEXTOFUNCTIONDICT dictionary
+from tkinter import *
 
 class Interpreter:
-    def __init__(self, currentRAM, master, runFreq):
+    def __init__(self, master, runFreq, args):
         self.master = master
         self.runFreq = runFreq
-        self.args = { #Dictionary that holds all arguments needed
-            "PC": 0, #Program counter
-            "RAM": currentRAM, #State of RAM
-            "ACC": 0, #Accumulator
-            "IX": 0, #Index register
-            "ZMP": False, #Comparison flag
-            "halt": False, #Halt flag
-            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag
-            }
+        self.args = args
 
-    def execute(stepFlag):
-        syntax.HEXTOFUNCTIONDICT[self.args["RAM"][self.args["PC"]]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
-        if not (self.args["halt"] or stepFlag) or self.args["PC"] > 255: #Checking if we can schedule the next call to execute
-            self.master.after(self.runFreq, lambda: self.execute(stepFlag))
-        return self.args #We return the dictionary for adi to display the error message
+    def execute(self, stepFlag):
+        if self.args["RAM"][int(self.args["PC"],16)] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
+            if not self.args["halt"]: #Checking if this opcode can be executed in the first place
+                syntax.HEXTOFUNCTIONDICT[self.args["RAM"][int(self.args["PC"], 16)]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
+                self.updateArgs(self.args) #Returning updated arguments after the execution
+                if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
+                    self.master.after(self.runFreq, lambda: self.execute(stepFlag))
+            if self.args["halt"]: #In the event that martin has an error on his side
+                self.displayError(self.args["errorMsg"])
+        else: #Undefined opcode case
+            self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
+            self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
+            self.displayError(self.args["errorMsg"])
 
-    def updateArgs(): #Stub function which will be overwritten by Adi's updateArgs method
+        return self.args #We need to return the dictionary in any case
+
+    def updateArgs(self, args): #Stub function which will be overwritten by Adi's updateArgs method
         print(self.args)
 
-    def stop(): #Method to be called in the event that the stop button is pressed
+    def displayError(self, errorMsg): #Stub function which will be overwritten by Adi's displayError method
+        print(self.args["errorMsg"])
+
+    def stop(self): #Method to be called in the event that the stop button is pressed
         self.args["halt"] = True
 
-    def start(stepFlag): #Method to run code if code has been stopped halfway through. Can also be used if mode is changed from step to run.
-        if self.args["PC"] > 255:
-            self.args["errorMsg"] = "Cannot run code: Pointer has reached end of memory."
-            return self.args
-        else:
-            self.execute(stepFlag)
+    def reinitArgs(self, args): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
+        #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
+        self.args = args
 
-if __name__ == "__main__": #Debug code
-    import assembler
-    test = Assembler() #Creating assembler object
-    test.init_RAM() #Creating RAM
-    allOkFlag, RAM, symbolTable, errorMsg = test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
-    interpreter = Interpreter(RAM)
-    interpreter.execute()
+    def changeFreq(self, newFreq):
+        self.runFreq = newFreq
+
 
 
 
@@ -77,3 +76,26 @@ interpretMethod(stepFlag):
         #SCHEDULE CALL HERE
 
 """
+
+if __name__ == "__main__":
+    root = Tk()
+    args = {
+        "RAM" : ["00" for i in range(256)],
+        "ACC" : "00",
+        "PC" : "00",
+        "IX" : "00",
+        "ZMP" : False,
+        "halt" : False,
+        "errorMsg": None
+    }
+    args["RAM"][0] = "0A"
+    args["RAM"][1] = "64"
+    args["RAM"][2] = "2B"
+
+
+    inter = Interpreter(root, 1, args)
+    inter.execute(True)
+
+
+
+    root.mainloop()

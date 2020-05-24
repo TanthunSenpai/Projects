@@ -7,21 +7,23 @@ except:
 class ErrorBar:
     def __init__(self, master, r, c):
         self.master = master
-        self.frame = Frame(master)
-        self.frame.grid(row = r, column = c, sticky = S)
+        self.frame = Frame(master, relief = "groove", bd= 3 )
+        self.frame.grid(row = r, column = c, sticky = W, pady = 10)
         self.fontSize = 12
         self.font = ("Consolas", self.fontSize)
         self.text = "Don't worry my friend, you have no errors....... yet"
         self.textBar = Label(self.frame,
                             text = self.text,
                             font = self.font,
-                            fg = "WHITE",
+                            fg = "black",
                             width = 50,
                             justify = LEFT,
-                            wraplength = 400,
-                            bg = "black"
+                            wraplength = 600,
+                            bg = "white",
+                            anchor = W,
+                            relief = "groove"
                             )
-        self.textBar.grid(row = 0, column = 0, sticky = S)
+        self.textBar.grid(row = 0, column = 0, sticky = W)
 
 
     def update(self, errMsg, *args):
