@@ -126,7 +126,10 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.args["RAM"][self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]]
         self.RAMpointer += 1
 
-
+    def dataToRAM(self, data): #Adds data to RAM
+        for line in data:
+            address = int(line)
+            self.args["RAM"][address] = hex(data[line])[2:]
 
     def passThrough(self, tokenList, data): #Being passed a list of tokens for each line (FROM ADI)
         #Using the CIE assembly language from the 9608 specification:
@@ -144,6 +147,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.__init__()
         self.init_RAM()
         self.code = tokenList
+        self.dataToRAM(data)
         for line in tokenList: #Iterating through the list to get each line, which is held as a sublist
             if len(line) == 3: #LABEL OPCODE OPERAND
                 self.label(line)
@@ -176,7 +180,12 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]], "bidash") #Running the assembler on this sample code
+    dataDict = {
+        204: 12,
+        255: 69,
+        254: 17
+    }
+    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]], dataDict) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?

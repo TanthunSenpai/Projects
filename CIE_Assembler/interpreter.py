@@ -14,10 +14,12 @@ class Interpreter:
                 self.updateArgs(self.args) #Returning updated arguments after the execution
                 if not stepFlag: #Checking if we can schedule the next call to execute
                     self.master.after(self.runFreq, lambda: self.execute(stepFlag))
-            elif self.args["halt"]: #In the event that martin has an error on his side
-                self.displayError(self.args["errorMsg"])
+            elif self.args["halt"]: #In the event that martin has an error on his side or code has finished
+                if self.args["errorMsg"] == "Executing...": #Means code has finished
+                    self.args["errorMsg"] = "Execution successful."
+                self.displayError(self.args["errorMsg"]) #If above was not met, the error message will not be modified, and so martin's error message will be shown.
             elif self.args["stop"]: #If we couldn't execute it, means stop flag was set
-                self.args["errorMsg"] = f"User initiated stop."
+                self.args["errorMsg"] = "User initiated stop."
                 self.displayError(self.args["errorMsg"])
         else: #Undefined opcode case
             self.args["halt"] = True #Setting the halt flag as we have got to an invalid opcode
@@ -37,6 +39,8 @@ class Interpreter:
 
     def start(self): #Method to be called in the event that run is pressed after a user stop.
         self.args["stop"] = False
+        self.args["errorMsg"] = "Executing..."
+        self.displayError(self.args["errorMsg"])
 
     def reinitArgs(self, args): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
         #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
@@ -44,6 +48,8 @@ class Interpreter:
 
     def changeFreq(self, newFreq):
         self.runFreq = newFreq
+        self.args["errorMsg"] = f"Execution frequency has been set to {newFreq}ms between instructions."
+        self.displayError(self.args["errorMsg"])
 
 
 if __name__ == "__main__":
