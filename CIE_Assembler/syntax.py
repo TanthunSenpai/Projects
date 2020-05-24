@@ -127,14 +127,14 @@ def JMP(args):
 
 
 def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
-    if int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 1:  #immediate addressing mode
+    if int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 0:  #immediate addressing mode
         num = int(args["RAM"][(int(args["PC"],16)+2)%256],16)   #in denary
         if num == int(args["ACC"],16):     #both in denary for comparison
             args["ZMP"] = True
         else:
             args["ZMP"] = False
 
-    elif int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 0:   #direct addressing mode
+    elif int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 1:   #direct addressing mode
         addrss = int(args["RAM"][int(args["PC"],16)+2],16)  #in denary, pointer
         if int(args["RAM"][addrss],16) == int(args["ACC"],16): #both numbers are in denary for comparison
             args["ZMP"] = True
@@ -142,7 +142,7 @@ def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
             args["ZMP"] = False
     else:   #neither immediate nor direct addressing modes
         args["halt"] = True
-        args["errorMsg"] = "Addressing mode error: only immediate or direct addressing modes are allowed"
+        args["errorMsg"] = "Addressing mode error: only immediate or direct addressing modes are allowed."
     args["PC"] = denHex((int(args["PC"],16) + 3) % 256)    #in hex string
 
 def JPE(args):
