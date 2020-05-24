@@ -26,7 +26,7 @@ class InterpreterControls:
 
 
     def assemble(self):
-        parsed, data = copy.deepcopy(self.getText())
+        parsed, data = self.getText()
         if parsed:
             isValid, args, sym, errMsg = self.passed(parsed,data)
             self.update_sym(sym)

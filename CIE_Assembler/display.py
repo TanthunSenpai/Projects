@@ -56,7 +56,6 @@ class Display:
                 self.regArray[reg].grid(row = 1 , column = j)
             j+=1
         self.regArray["PC-label"]["bg"] = "light Blue"
-        self.regArray["ACC-label"]["bg"] = "orange"
 
         self.highlighted = {}
 
@@ -110,11 +109,9 @@ class Display:
     def updateArgs(self,args):
         arggs = copy.deepcopy(args)
         self.remove_hg("PC")
-        self.remove_hg("ACC")
         for reg in self.registers:
             self.registers[reg] = arggs[reg]
         self.add_hg("PC", "light blue")
-        self.add_hg("ACC", "orange")
         self.ram = arggs["RAM"]
         self.update()
 
