@@ -32,11 +32,9 @@ if __name__ == "__main__":
     displayFrame.grid(row = 1, column = 1, sticky = N)
     editor = Editor(root,1,0)
     inputBar = InBar(displayFrame,2,0)
-
     outBar = outBar(displayFrame,1,0)
     display = Display(displayFrame,0,0)
     errorBar = ErrorBar(displayFrame,3,0)
-
 
     #Connecting things together
     syntax.outStub = outBar.out
