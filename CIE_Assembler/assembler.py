@@ -129,7 +129,11 @@ class Assembler: #Writing as a class so we can have a separate class for each as
     def dataToRAM(self, data): #Adds data to RAM
         for line in data:
             address = int(line)
-            self.args["RAM"][address] = hex(data[line])[2:].upper()
+            string = hex(data[line])[2:].upper()
+            if len(string) == 1: #Need to add extra 0
+                string = "0" + string
+            self.args["RAM"][address] = string
+            
 
     def passThrough(self, tokenList, data): #Being passed a list of tokens for each line (FROM ADI)
         #Using the CIE assembly language from the 9608 specification:
