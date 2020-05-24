@@ -43,6 +43,28 @@ class Interpreter:
         self.runFreq = newFreq
 
 
+if __name__ == "__main__":
+    root = Tk()
+    args = {
+        "RAM" : ["00" for i in range(256)],
+        "ACC" : "00",
+        "PC" : "00",
+        "IX" : "00",
+        "ZMP" : False,
+        "halt" : False,
+        "errorMsg": None
+    }
+    args["RAM"][0] = "0A"
+    args["RAM"][1] = "64"
+    args["RAM"][2] = "2B"
+
+
+    inter = Interpreter(root, 1, args)
+    inter.execute(True)
+
+
+
+    root.mainloop()
 
 
 """PLAN:
@@ -79,26 +101,3 @@ interpretMethod(stepFlag):
         #SCHEDULE CALL HERE
 
 """
-
-if __name__ == "__main__":
-    root = Tk()
-    args = {
-        "RAM" : ["00" for i in range(256)],
-        "ACC" : "00",
-        "PC" : "00",
-        "IX" : "00",
-        "ZMP" : False,
-        "halt" : False,
-        "errorMsg": None
-    }
-    args["RAM"][0] = "0A"
-    args["RAM"][1] = "64"
-    args["RAM"][2] = "2B"
-
-
-    inter = Interpreter(root, 1, args)
-    inter.execute(True)
-
-
-
-    root.mainloop()
