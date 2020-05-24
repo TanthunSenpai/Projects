@@ -128,7 +128,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 
 
 
-    def passThrough(self, tokenList): #Being passed a list of tokens for each line (FROM ADI)
+    def passThrough(self, tokenList, data): #Being passed a list of tokens for each line (FROM ADI)
         #Using the CIE assembly language from the 9608 specification:
         # - Labels followed by instructions will have a tuple of length 3
         # - Regular opcodes will have a length of 2
@@ -176,7 +176,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
+    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]], "bidash") #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?
