@@ -75,7 +75,7 @@ def LDD(args):
 def LDI(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
     value = int(args["RAM"][addrss],16)         #in denary, the second address
-    args["ACC"] = value     #in hex string
+    args["ACC"] = denHex(value)     #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDX(args):
@@ -121,7 +121,6 @@ def DEC(args):
 def JMP(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #format hex address to hex string
     args["PC"] = denHex(addrss)
-
 
 
 def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
