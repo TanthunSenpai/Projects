@@ -72,6 +72,7 @@ class Editor:
         ret = []
         error = False
         invalid = -1
+        data = {}
 
         for i, l in enumerate(text):
             line = l.strip().split()
@@ -117,7 +118,7 @@ class Editor:
         self.report("No error: " + random.choice(cheerMessages))
         print(ret)
 
-        return ret
+        return ret, data
 
 
         '''

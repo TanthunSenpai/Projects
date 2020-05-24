@@ -26,9 +26,9 @@ class InterpreterControls:
 
 
     def assemble(self):
-        parsed = copy.deepcopy(self.getText())
+        parsed, data = copy.deepcopy(self.getText())
         if parsed:
-            isValid, args, sym, errMsg = self.passed(parsed)
+            isValid, args, sym, errMsg = self.passed(parsed,data)
             self.update_sym(sym)
             if isValid:
                 args = copy.deepcopy(args)
@@ -53,8 +53,9 @@ class InterpreterControls:
 
     def run(self):
         if self.runButton["text"] == "Run":
-            self.exec(False)
+            self.start()
             self.setInState(True)
+            self.exec(False)
             self.runButton["text"] = "Stop"
         else:
             self.runButton["text"] = "Run"
@@ -62,8 +63,9 @@ class InterpreterControls:
 
 
     def step(self):
-        self.exec(True)
+        self.start()
         self.setInState(False)
+        self.exec(True)
 
     def stop(self):
         pass
@@ -81,4 +83,5 @@ class InterpreterControls:
         self.clearOutput = args[7]
         self.clearRam = args[8]
         self.stop = args[9]
+        self.start = args[10]
         pass

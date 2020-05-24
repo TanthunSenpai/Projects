@@ -71,6 +71,7 @@ if __name__ == "__main__":
             "stop": False,
         }),
         interpreter.stop,
+        interpreter.start
         )
     toolBar.get_text = editor.get_text
     toolBar.writeText = editor.insert_text
