@@ -44,6 +44,7 @@ class InterpreterControls:
 
     def reset(self):
         self.stop()
+        self.runButton["text"] = "Run"
         self.runButton["state"] = "disabled"
         self.stepButton["state"] = "disabled"
         self.resetButton["state"] = "disabled"
