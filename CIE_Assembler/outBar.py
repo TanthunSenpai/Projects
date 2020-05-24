@@ -44,6 +44,7 @@ class outBar:
 
     def clearBar(self):
         self.textBar.configure(text ="")
+        self.text = ""
 
 
 

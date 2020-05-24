@@ -50,7 +50,27 @@ if __name__ == "__main__":
     interpreter.updateArgs = display.updateArgs
     editButtons.update_sym = toolBar.update_sym
 
-    editButtons.assign_Functions(editor.lexical_analysis, asem.passThrough, display.updateArgs, errorBar.update, interpreter.reinitArgs, interpreter.execute, inputBar.setInState)
+    editButtons.assign_Functions(
+        editor.lexical_analysis,
+        asem.passThrough,
+        display.updateArgs,
+        errorBar.update,
+        interpreter.reinitArgs,
+        interpreter.execute,
+        inputBar.setInState,
+        outBar.clearBar,
+        lambda: display.updateArgs({
+            "RAM": ["00" for i in range(255)],
+            "PC": "00",
+            "ACC": "00",
+            "IX": "00",
+            "ZMP": False,
+            "halt": False,
+            "inFlag": False,
+            "stop": False,
+        }),
+        interpreter.stop,
+        )
     toolBar.get_text = editor.get_text
     toolBar.writeText = editor.insert_text
 

@@ -43,27 +43,42 @@ class InterpreterControls:
         pass
 
     def reset(self):
+        self.stop()
         self.runButton["state"] = "disabled"
         self.stepButton["state"] = "disabled"
         self.resetButton["state"] = "disabled"
         self.assembleButton["state"] = "normal"
+        self.clearOutput()
+        self.clearRam()
 
     def run(self):
-        self.exec(False)
-        self.setInState(True)
+        if self.runButton["text"] == "Run":
+            self.exec(False)
+            self.setInState(True)
+            self.runButton["text"] = "Stop"
+        else:
+            self.runButton["text"] = "Run"
+            self.stop()
+
 
     def step(self):
         self.exec(True)
         self.setInState(False)
 
+    def stop(self):
+        pass
 
 
-    def assign_Functions(self,getText,passed ,updateArgs,report,reinitInterpreter, exec, inState):
-        self.getText = getText
-        self.passed = passed
-        self.updateArgs = updateArgs
-        self.report = report
-        self.reinitInterpreter = reinitInterpreter
-        self.exec = exec
-        self.setInState = inState
+
+    def assign_Functions(self,*args):
+        self.getText = args[0]
+        self.passed = args[1]
+        self.updateArgs = args[2]
+        self.report = args[3]
+        self.reinitInterpreter = args[4]
+        self.exec = args[5]
+        self.setInState = args[6]
+        self.clearOutput = args[7]
+        self.clearRam = args[8]
+        self.stop = args[9]
         pass
