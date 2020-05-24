@@ -32,6 +32,9 @@ class Interpreter:
     def stop(self): #Method to be called in the event that the stop button is pressed
         self.args["stop"] = True
 
+    def start(self): #Method to be called in the event that run is pressed after a user stop.
+        self.args["stop"] = False
+
     def reinitArgs(self, args): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
         #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
         self.args = args
