@@ -44,6 +44,7 @@ if __name__ == "__main__":
     editor.report = errorBar.update
     toolBar.setVersion(VERSION)
     toolBar.assign_numSys(display.numSys)
+    toolBar.reset = editButtons.reset
     inputBar.execute = interpreter.execute
 
 

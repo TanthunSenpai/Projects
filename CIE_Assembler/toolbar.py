@@ -73,14 +73,14 @@ class ToolBar:
         os.chdir(dir_path)
         path = os.path.abspath("./")
 
-        popLoad = Toplevel()
-        popLoad.title("Load")
+        self.popLoad = Toplevel()
+        self.popLoad.title("Load")
         v = StringVar()
         self.fontSize = 12
         self.font = ("Consolas",self.fontSize)
 
         for (i,fileName) in enumerate(os.listdir(path)):
-            Radiobutton(popLoad,
+            Radiobutton(self.popLoad,
                         text = fileName,
                         variable =v,
                         value =fileName,
@@ -91,7 +91,7 @@ class ToolBar:
                         activeforeground = "green",
                         ).grid(row =i, column = 0)
 
-        button =Button(popLoad,
+        button =Button(self.popLoad,
                        text ="Load",
                        width= 30,
                        font = self.font,
@@ -99,7 +99,7 @@ class ToolBar:
                        command = lambda:self.load(v.get())
                        )
         button.grid(row = i+1, column = 0,sticky ="n")
-        popLoad.mainloop()
+        self.popLoad.mainloop()
 
 
     def load(self,fileName):
@@ -112,9 +112,15 @@ class ToolBar:
         self.f = open(self.fileName,"r")
         self.fileContent = self.f.read()
         self.writeText(self.fileContent)
+        self.popLoad.destroy()
+        self.reset()
 
     def writeText(self,text):
         self.text =text
+
+    def reset(self):
+
+        pass
 
 
 
