@@ -49,6 +49,7 @@ if __name__ == "__main__":
 
 
     interpreter.updateArgs = display.updateArgs
+    interpreter.displayError = errorBar.update
     editButtons.update_sym = toolBar.update_sym
 
     editButtons.assign_Functions(
