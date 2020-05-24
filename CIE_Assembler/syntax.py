@@ -152,7 +152,8 @@ def JPE(args):
         args["PC"] = denHex(addrss)     #in hex str
     else:   #case: not equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
-
+    args["ZMP"] == False
+    
 def JPN(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == False:  #case: not equal
@@ -160,6 +161,7 @@ def JPN(args):
         args["PC"] = denHex(addrss)     #in hex str
     else:   #case: equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["ZMP"] == False
 
 def inStub(letter):
     return letter
