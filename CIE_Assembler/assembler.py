@@ -126,7 +126,9 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.args["RAM"][self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]]
         self.RAMpointer += 1
 
-
+    def dataToRAM(self, data):
+        for line in data:
+            
 
     def passThrough(self, tokenList, data): #Being passed a list of tokens for each line (FROM ADI)
         #Using the CIE assembly language from the 9608 specification:
