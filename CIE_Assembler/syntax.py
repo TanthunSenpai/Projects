@@ -37,7 +37,7 @@ interpreter:
 
 # dictionary that is passed to all functions
 args = {
-    "PC" - int (denary)
+    "PC" - hex str
     "RAM" - a list of hex str
     "ACC" - hex str
     "IX" - hex str
@@ -74,7 +74,7 @@ def LDD(args):
 
 def LDI(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    value = denHex(int(args["RAM"][addrss],16)%256)     #in hex string
+    value = int(args["RAM"][addrss],16)         #in denary, the second address
     args["ACC"] = value     #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
@@ -119,7 +119,10 @@ def DEC(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def JMP(args):
-    args["PC"] = denHex(int(args["RAM"][(int(args["PC"],16)+1)%256],16))   #format hex address to hex string
+    addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #format hex address to hex string
+    args["PC"] = denHex(addrss)
+
+
 
 def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
     if int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 1:  #immediate addressing mode
@@ -193,17 +196,17 @@ HEXTOFUNCTIONDICT = {
 }
 
 if __name__ == "__main__":
-    """
+
     args = {
-        "PC": "A",
-        "RAM": ["00","00","03","F","0B","00","00","00","00","00","00","00","00","00","00","00"],
+        "PC": "00",
+        "RAM": ["00","02","03","0F","0B","00","00","00","00","00","00","00","00","00","00","00"],
         "ACC": "FF",
         "IX": "01",
         "ZMP": False,
         "halt": False,
         "errorMsg": ""
     }
-    """
+
 
     #LDM(args)
     #LDD(args)
@@ -221,7 +224,7 @@ if __name__ == "__main__":
 
     #IN and OUT funcs left for testing
 
-    """
+
     print("PC", args["PC"])
     print("ACC", args["ACC"])
     print("ACC type", type(args["ACC"]))
@@ -230,4 +233,3 @@ if __name__ == "__main__":
     print(args["RAM"])
     print("MSG", args["errorMsg"])
     print("ZMP", args["ZMP"])
-    """
