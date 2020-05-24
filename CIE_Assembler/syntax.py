@@ -68,8 +68,8 @@ def LDM(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDD(args):
-    addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    args["ACC"] = denHex(int(args["RAM"][addrss],16)%256)  #in hex string
+    value = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
+    args["ACC"] = denHex(value)  #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDI(args):
@@ -184,7 +184,7 @@ HEXTOFUNCTIONDICT = {
     "0D": LDX,
     "0E": LDR,
     "0F": STO,
-    "1A": ADD,
+    "1A": ADD,  
     "1B": INC,
     "1C": DEC,
     "1D": JMP,
