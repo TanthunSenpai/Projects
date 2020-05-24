@@ -18,7 +18,7 @@ class Interpreter:
                 self.displayError(self.args["errorMsg"])
         else: #Undefined opcode case
             self.args["halt"] = True #Setting the halt flag as we have got to an invalid opcode
-            self.args["errorMsg"] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
+            self.args["errorMsg"] = f"Opcode {self.args['RAM'][int(self.args['PC'], 16)]} is undefined."
             self.displayError(self.args["errorMsg"])
 
         return self.args #We need to return the dictionary in any case
