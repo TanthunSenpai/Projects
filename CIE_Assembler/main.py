@@ -70,7 +70,7 @@ if __name__ == "__main__":
             "inFlag": False,
             "stop": False,
         },
-        [None for i in range(256)]
+        ["blank" for i in range(256)]
         ),
         interpreter.stop,
         interpreter.start
