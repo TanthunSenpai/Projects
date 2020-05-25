@@ -9,16 +9,21 @@ class Interpreter:
 
     def execute(self, stepFlag):
         if self.args["RAM"][int(self.args["PC"],16)] in syntax.HEXTOFUNCTIONDICT: #Checking if the opcode exists in the dictionary before calling the method
-            if not self.args["halt"]: #Checking if this opcode can be executed in the first place
+            if not self.args["halt"] and not self.args["stop"]: #Checking if this opcode can be executed in the first place
                 syntax.HEXTOFUNCTIONDICT[self.args["RAM"][int(self.args["PC"], 16)]](self.args) #Calls the respective method for the opcode that the PC is pointing at, passing the dictionary in as a parameter
                 self.updateArgs(self.args) #Returning updated arguments after the execution
-                if not self.args["halt"] and not stepFlag: #Checking if we can schedule the next call to execute
+                if not stepFlag: #Checking if we can schedule the next call to execute
                     self.master.after(self.runFreq, lambda: self.execute(stepFlag))
-            if self.args["halt"]: #In the event that martin has an error on his side
+            elif self.args["halt"]: #In the event that martin has an error on his side or code has finished
+                if self.args["errorMsg"] == "Executing...": #Means code has finished
+                    self.args["errorMsg"] = "Execution successful."
+                self.displayError(self.args["errorMsg"]) #If above was not met, the error message will not be modified, and so martin's error message will be shown.
+            elif self.args["stop"]: #If we couldn't execute it, means stop flag was set
+                self.args["errorMsg"] = "User initiated stop."
                 self.displayError(self.args["errorMsg"])
         else: #Undefined opcode case
-            self.args["RAM"][self.args["halt"]] = True #Setting the halt flag as we have got to an invalid opcode
-            self.args["RAM"][self.args["errorMsg"]] = f"Opcode {self.args['RAM'][self.args['PC']]} is undefined."
+            self.args["halt"] = True #Setting the halt flag as we have got to an invalid opcode
+            self.args["errorMsg"] = f"Opcode {self.args['RAM'][int(self.args['PC'], 16)]} is undefined."
             self.displayError(self.args["errorMsg"])
 
         return self.args #We need to return the dictionary in any case
@@ -30,7 +35,12 @@ class Interpreter:
         print(self.args["errorMsg"])
 
     def stop(self): #Method to be called in the event that the stop button is pressed
-        self.args["halt"] = True
+        self.args["stop"] = True
+
+    def start(self): #Method to be called in the event that run is pressed after a user stop.
+        self.args["stop"] = False
+        self.args["errorMsg"] = "Executing..."
+        self.displayError(self.args["errorMsg"])
 
     def reinitArgs(self, args): #Needs to reinitialise the args dictionary. Can reuse RAM, master, runFreq.
         #Called whenever assemble is pressed as we need to somehow keep the initial state of RAM before it was modifed
@@ -38,8 +48,35 @@ class Interpreter:
 
     def changeFreq(self, newFreq):
         self.runFreq = newFreq
+        self.args["errorMsg"] = f"Execution frequency has been set to {newFreq}ms between instructions."
+        self.displayError(self.args["errorMsg"])
+
+    def set_freq(self,freq):
+        self.runFreq = int(0.5**(freq-1)*1000)
 
 
+if __name__ == "__main__":
+    root = Tk()
+    args = {
+        "RAM" : ["00" for i in range(256)],
+        "ACC" : "00",
+        "PC" : "00",
+        "IX" : "00",
+        "ZMP" : False,
+        "halt" : False,
+        "errorMsg": None
+    }
+    args["RAM"][0] = "0A"
+    args["RAM"][1] = "64"
+    args["RAM"][2] = "2B"
+
+
+    inter = Interpreter(root, 1, args)
+    inter.execute(True)
+
+
+
+    root.mainloop()
 
 
 """PLAN:
@@ -76,26 +113,3 @@ interpretMethod(stepFlag):
         #SCHEDULE CALL HERE
 
 """
-
-if __name__ == "__main__":
-    root = Tk()
-    args = {
-        "RAM" : ["00" for i in range(256)],
-        "ACC" : "00",
-        "PC" : "00",
-        "IX" : "00",
-        "ZMP" : False,
-        "halt" : False,
-        "errorMsg": None
-    }
-    args["RAM"][0] = "0A"
-    args["RAM"][1] = "64"
-    args["RAM"][2] = "2B"
-
-
-    inter = Interpreter(root, 1, args)
-    inter.execute(True)
-
-
-
-    root.mainloop()

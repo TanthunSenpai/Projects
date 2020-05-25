@@ -37,7 +37,7 @@ interpreter:
 
 # dictionary that is passed to all functions
 args = {
-    "PC" - int (denary)
+    "PC" - hex str
     "RAM" - a list of hex str
     "ACC" - hex str
     "IX" - hex str
@@ -68,13 +68,15 @@ def LDM(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDD(args):
-    addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    args["ACC"] = denHex(int(args["RAM"][addrss],16)%256)  #in hex string
+    address = int(args["RAM"][(int(args["PC"], 16) + 1) % 256] , 16)
+    value = args["RAM"][address]
+    args["ACC"] = value  #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDI(args):
-    addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
-    value = denHex(int(args["RAM"][addrss],16)%256)     #in hex string
+    address = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #in denary
+    secondAddress = int(args["RAM"][address],16) #in denary, the second address
+    value = args["RAM"][secondAddress]
     args["ACC"] = value     #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
@@ -94,7 +96,8 @@ def STO(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def ADD(args):
-    value = int(args["RAM"][(int(args["PC"],16)+1)%256],16)     #in denary
+    address = int(args["RAM"][(int(args["PC"],16)+1)%256],16)     #in denary
+    value = int(args["RAM"][address], 16)
     args["ACC"] = denHex((int(args["ACC"], 16) + value) % 256) #in hex denary
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
@@ -119,17 +122,19 @@ def DEC(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def JMP(args):
-    args["PC"] = denHex(int(args["RAM"][(int(args["PC"],16)+1)%256],16))   #format hex address to hex string
+    addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)   #format hex address to hex string
+    args["PC"] = denHex(addrss)
+
 
 def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
-    if int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 1:  #immediate addressing mode
+    if int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 0:  #immediate addressing mode
         num = int(args["RAM"][(int(args["PC"],16)+2)%256],16)   #in denary
         if num == int(args["ACC"],16):     #both in denary for comparison
             args["ZMP"] = True
         else:
             args["ZMP"] = False
 
-    elif int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 0:   #direct addressing mode
+    elif int(args["RAM"][(int(args["PC"],16)+1)%256],16) == 1:   #direct addressing mode
         addrss = int(args["RAM"][int(args["PC"],16)+2],16)  #in denary, pointer
         if int(args["RAM"][addrss],16) == int(args["ACC"],16): #both numbers are in denary for comparison
             args["ZMP"] = True
@@ -137,22 +142,26 @@ def CMP(args):  #format: CMP ADDRESSINGMODE OPERAND
             args["ZMP"] = False
     else:   #neither immediate nor direct addressing modes
         args["halt"] = True
-        args["errorMsg"] = "Addressing mode error: only immediate or direct addressing modes are allowed"
+        args["errorMsg"] = "Addressing mode error: only immediate or direct addressing modes are allowed."
     args["PC"] = denHex((int(args["PC"],16) + 3) % 256)    #in hex string
 
 def JPE(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == True:   #case: equal
-        args["PC"] = addrss #in denary, PC is a pointer
+        addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in hex str to int
+        args["PC"] = denHex(addrss)     #in hex str
     else:   #case: not equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["ZMP"] = False
 
 def JPN(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == False:  #case: not equal
-        args["PC"] = addrss     #in denary, PC is a pointer
+        addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in hex str to int
+        args["PC"] = denHex(addrss)     #in hex str
     else:   #case: equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
+    args["ZMP"] = False
 
 def inStub(letter):
     return letter
@@ -193,17 +202,17 @@ HEXTOFUNCTIONDICT = {
 }
 
 if __name__ == "__main__":
-    """
+
     args = {
-        "PC": "A",
-        "RAM": ["00","00","03","F","0B","00","00","00","00","00","00","00","00","00","00","00"],
-        "ACC": "FF",
+        "PC": "00",
+        "RAM": ["00","00","00","04","0B","00","00","00","00","00","00","00","00","00","00","00"],
+        "ACC": "00",
         "IX": "01",
         "ZMP": False,
         "halt": False,
         "errorMsg": ""
     }
-    """
+
 
     #LDM(args)
     #LDD(args)
@@ -221,7 +230,7 @@ if __name__ == "__main__":
 
     #IN and OUT funcs left for testing
 
-    """
+
     print("PC", args["PC"])
     print("ACC", args["ACC"])
     print("ACC type", type(args["ACC"]))
@@ -230,4 +239,3 @@ if __name__ == "__main__":
     print(args["RAM"])
     print("MSG", args["errorMsg"])
     print("ZMP", args["ZMP"])
-    """

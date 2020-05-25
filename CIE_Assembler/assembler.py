@@ -22,7 +22,8 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             "ZMP": False, #Comparison flag
             "halt": False, #Halt flag
             "inFlag": False, #Input flag
-            "errorMsg": "Execution successful" #Error message to be given out in the case of a flag. By default it is set to be successful.
+            "errorMsg": "Execution successful", #Error message to be given out in the case of a flag. By default it is set to be successful.
+            "stop": False #Flag for user stop 
             }
 
     def init_RAM(self): #Using a 256 byte RAM (16 by 16) in the form of a 2D list initialised to 00 in hex
@@ -125,9 +126,16 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.args["RAM"][self.RAMpointer] = syntax.OPCODETOHEXDICT[line[0]]
         self.RAMpointer += 1
 
+    def dataToRAM(self, data): #Adds data to RAM
+        for line in data:
+            address = int(line)
+            string = hex(data[line])[2:].upper()
+            if len(string) == 1: #Need to add extra 0
+                string = "0" + string
+            self.args["RAM"][address] = string
+            
 
-
-    def passThrough(self, tokenList): #Being passed a list of tokens for each line (FROM ADI)
+    def passThrough(self, tokenList, data): #Being passed a list of tokens for each line (FROM ADI)
         #Using the CIE assembly language from the 9608 specification:
         # - Labels followed by instructions will have a tuple of length 3
         # - Regular opcodes will have a length of 2
@@ -143,6 +151,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         self.__init__()
         self.init_RAM()
         self.code = tokenList
+        self.dataToRAM(data)
         for line in tokenList: #Iterating through the list to get each line, which is held as a sublist
             if len(line) == 3: #LABEL OPCODE OPERAND
                 self.label(line)
@@ -175,7 +184,12 @@ class Assembler: #Writing as a class so we can have a separate class for each as
 if __name__ == "__main__": #Test input for finished functions
     test = Assembler() #Creating assembler object
     test.init_RAM() #Creating RAM
-    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]]) #Running the assembler on this sample code
+    dataDict = {
+        204: 12,
+        255: 69,
+        254: 17
+    }
+    test.passThrough([["JMP", "LABEL"], ["LABEL", "END"], ["CMP", "#16"], ["JMP", "FAKELABEL"]], dataDict) #Running the assembler on this sample code
     test.showContents() #Debug function to see output
 
 #Consider bus width, might be useful to model?

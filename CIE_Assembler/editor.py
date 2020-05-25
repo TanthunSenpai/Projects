@@ -66,8 +66,49 @@ class Editor:
         self.textArea.yview(*args)
 
 
+    def testData(self, text):
+        retDict = {}
+        if "<DB>" in text and "</DB>" in text:
+            ptr = text.find("</DB>")
+            dataText = text[:ptr+5]
+            restText = text[ptr+5:]
+            dataText = text[4:len(dataText) - 5]
+            dataText.strip()
+            tokens = dataText.split()
+            for each in tokens:
+                if ':' in each:
+                    line = each.split(":")
+                    if len(line) == 2:
+                        if line[0].isnumeric():
+                            if line[1].isnumeric() and int(line[0]) < 256 and int(line[0]) >= 0:
+                                if int(line[1]) < 256 and int(line[1]) >= 0:
+                                    retDict[line[0]] = int(line[1])
+                                else:
+                                    return {}, text
+                            else:
+                                return {}, text
+                        else:
+                            return {}, text
+                    else:
+                        return {}, text
+                else:
+                    return {}, text
+
+            return retDict, restText
+        else:
+            return {}, text
+
+
+
+
+
+
+
     def lexical_analysis(self):
         text = self.textArea.get('0.0', 'end').rstrip()
+        if text == "":
+            return False, {}
+        data, text = self.testData(text)
         text = text.split("\n")
         ret = []
         error = False
@@ -80,19 +121,19 @@ class Editor:
                     if ':' in each:
                         line[line.index(each)] = "<" + each[:len(each)-1] + ">"
                     elif '#' in each and each[1:].isnumeric():
-                        line[line.index(each)] = int(each[1:])
+                        line[line.index(each)] = "<" + each[1:]
                     elif 'B' in each and each[1:].isnumeric():
                         for ch in each[1:]:
                             if int(ch) > 1:
                                 self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not binary")
-                                return False
+                                return False, data
                         line[line.index(each)] = int(each[1:], 2)
 
                     elif '&' in each and each[1:].isalnum():
                         for ch in each[1:]:
                             if (ord(ch) > ord("F") or ord(ch) < ord("A")) and not ch.isnumeric():
                                 self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not hex")
-                                return False
+                                return False, data
                         line[line.index(each)] = int(each[1:], 16)
 
                     elif each.isnumeric():
@@ -103,7 +144,7 @@ class Editor:
                 valid, msg = self.syntax_analysis(line)
                 if not valid:
                     self.report("Error on Line "+ str(i+1) + ": - "+ msg)
-                    return False
+                    return False, data
 
                 for each in line:
                     if isinstance(each,str):
@@ -116,8 +157,7 @@ class Editor:
 
         self.report("No error: " + random.choice(cheerMessages))
         print(ret)
-
-        return ret
+        return ret, data
 
 
         '''
@@ -183,9 +223,16 @@ class Editor:
                     return False, "Bad operand"
             elif tokens[opCodePos] in ["LDR", "LDM", "CMP"]:
                 if len(tokens) - opCodePos == 2:
-                    if isinstance(tokens[opCodePos + 1], int):
-                        if not(tokens[opCodePos + 1] >= 0 and tokens[opCodePos+1] < 256):
-                            return False, "Number out of range"
+                    if isinstance(tokens[opCodePos + 1], str):
+                        if tokens[opCodePos + 1][0] == "<" and tokens[opCodePos + 1][1:].isnumeric():
+                            k = int(tokens[opCodePos + 1][1:])
+                            if not(k>= 0 and k < 256):
+                                return False, "Number out of range"
+                            if tokens[opCodePos] != "CMP":
+                                tokens[opCodePos+1] = k
+                            else:
+                                tokens[opCodePos+1] =  "#"+tokens[opCodePos + 1][1:]
+
                     else:
                         return False, "Bad Operand"
                 else:
@@ -228,7 +275,7 @@ if __name__ == "__main__":
     root = Tk()
     editor = Editor(root, 0, 0)
 
-    btn = Button(root, text = "test", command = lambda: editor.update_numLine())
+    btn = Button(root, text = "test", command = lambda: editor.lexical_analysis())
     btn.grid(row = 0, column = 1)
 
 

@@ -26,9 +26,9 @@ class InterpreterControls:
 
 
     def assemble(self):
-        parsed = copy.deepcopy(self.getText())
+        parsed, data = self.getText()
         if parsed:
-            isValid, args, sym, errMsg = self.passed(parsed)
+            isValid, args, sym, errMsg = self.passed(parsed,data)
             self.update_sym(sym)
             if isValid:
                 args = copy.deepcopy(args)
@@ -43,27 +43,46 @@ class InterpreterControls:
         pass
 
     def reset(self):
+        self.stop()
+        self.runButton["text"] = "Run"
         self.runButton["state"] = "disabled"
         self.stepButton["state"] = "disabled"
         self.resetButton["state"] = "disabled"
         self.assembleButton["state"] = "normal"
+        self.clearOutput()
+        self.clearRam()
 
     def run(self):
-        self.exec(False)
-        self.setInState(True)
+        if self.runButton["text"] == "Run":
+            self.start()
+            self.setInState(True)
+            self.exec(False)
+            self.runButton["text"] = "Stop"
+        else:
+            self.runButton["text"] = "Run"
+            self.stop()
+
 
     def step(self):
-        self.exec(True)
+        self.start()
         self.setInState(False)
+        self.exec(True)
+
+    def stop(self):
+        pass
 
 
 
-    def assign_Functions(self,getText,passed ,updateArgs,report,reinitInterpreter, exec, inState):
-        self.getText = getText
-        self.passed = passed
-        self.updateArgs = updateArgs
-        self.report = report
-        self.reinitInterpreter = reinitInterpreter
-        self.exec = exec
-        self.setInState = inState
+    def assign_Functions(self,*args):
+        self.getText = args[0]
+        self.passed = args[1]
+        self.updateArgs = args[2]
+        self.report = args[3]
+        self.reinitInterpreter = args[4]
+        self.exec = args[5]
+        self.setInState = args[6]
+        self.clearOutput = args[7]
+        self.clearRam = args[8]
+        self.stop = args[9]
+        self.start = args[10]
         pass
