@@ -3,7 +3,6 @@ try:
 except:
     from tkinter import *
 from collections import OrderedDict
-import time
 import os
 
 class ToolBar:
@@ -30,7 +29,7 @@ class ToolBar:
             self.toolbar.add_cascade(label = each, menu = self.bars[each])
         self.master.config(menu = self.toolbar)
 
-        self.bars["File"].add_command(label = "Save", command = lambda: self.save())
+        self.bars["File"].add_command(label = "Save", command = lambda: self.pop_save())
         self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
         self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
@@ -53,11 +52,56 @@ class ToolBar:
         text = ""
         return text
 
+    def setFile(self,value):
+        self.fileNameText.delete(1.0,END)
+        self.fileNameText.insert(END,value)
 
+    def CurSelect(self,event):
+        self.value = self.savedFileDisplay.get(self.savedFileDisplay.curselection())
+        self.setFile(self.value)
 
-    def save(self):
-
+    def writeFile(self,fileName):
         self.text =self.get_text()
+        self.f = open(fileName,"w")
+        self.f.write(self.text)
+        self.f.close()
+
+
+    def checkFormat(self,fileName):
+        self.invalidChar = ["/",":","|","?","*",">","<"]
+        self.validFlag = True
+        i =0
+        while i <= len(self.invalidChar)-1 and self.validFlag ==True:
+            if self.invalidChar[i] in fileName:
+                self.errorPopup = Toplevel()
+                self.errorPopup.title("ERROR")
+                self.errorLabel = Label(self.errorPopup,text ="Invalid File Name",width =20,height = 3,font =("Times",11))
+                self.errorLabel.pack()
+                self.quitBtn = Button(self.errorPopup,text ="Quit",width = 10,height = 1,font = ("Times",11),command = lambda: self.errorPopup.destroy())
+                self.quitBtn.pack()
+                self.validFlag = False
+            i += 1
+
+        if fileName in self.existingFile and self.validFlag == True:
+            self.errorPopup = Toplevel()
+            self.errorPopup.title("ERROR")
+            self.errorLabel = Label(self.errorPopup,text ="File Already exist. Do you want to overwrite it?",height = 5, width = 20, font =("Times",11),wraplength =100)
+            self.errorLabel.grid(row = 0, column = 0,columnspan=2)
+            self.yesBtn = Button(self.errorPopup,text ="Yes",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.writeFile(fileName))
+            self.yesBtn.grid(row = 1, column =0)
+            self.noBtn = Button(self.errorPopup,text ="No",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.errorPopup.destroy())
+            self.noBtn.grid(row = 1, column =1)
+            self.validFlag = False
+
+        elif self.validFlag == True and fileName[-4:] == ".txt":
+            self.writeFile(fileName)
+
+        elif self.validFlag == True:
+            self.writeFile(fileName+".txt")
+
+
+    def pop_save(self):
+
 
         #change path
         path = os.path.abspath("")
@@ -65,11 +109,36 @@ class ToolBar:
         os.chdir(dir_path)
         path = os.path.abspath("./")
 
+        self.popSave = Toplevel()
+        self.popSave.title("Save File")
+        self.fontSize = 14
+        self.font = ("Consolas",self.fontSize)
+        self.label = Label(self.popSave,text = "Existing Files:",font = ("times",11))
+        self.label.grid(row = 0,column = 0, sticky="w", columnspan = 3)
+        self.savedFileDisplay = Listbox(self.popSave,width = 50,font = self.font)
+        self.savedFileDisplay.grid(row = 1,column = 0, columnspan = 3)
+        self.savedFileDisplay.bind('<<ListboxSelect>>',self.CurSelect)
+        self.fileLabel = Label(self.popSave,text ="File Name: ",height = 1,width = 7,font = ("times",12))
+        self.fileLabel.grid(row = 3,column = 0,sticky = "e")
+        self.existingFile = []
+        for fileName in os.listdir(path):
+            self.existingFile.append(fileName)
+            self.savedFileDisplay.insert(END,fileName)
+
+        self.fileNameText = Text(self.popSave,height = 1,width = 35,font = self.font)
+        self.fileNameText.grid(row = 3, column =1,sticky ="w")
+
+        self.saveBtn = Button(self.popSave,text = "Save", width = 6,height = 1, font = ("Consolas",12),command =lambda: self.checkFormat(self.fileNameText.get("0.0",'end')[0:-1]))
+        self.saveBtn.grid(row = 3, column = 2)
+
+
+
         #create file
-        self.fileName =time.strftime("%d-%m-%y_%H-%M-%S",time.localtime())+".txt"
+        #self.fileName =time.strftime("%d-%m-%y_%H-%M-%S",time.localtime())+".txt"
+        """
         self.f = open(self.fileName,"w")
         self.f.write(self.text)
-        self.f.close()
+        self.f.close()"""
 
 
 
