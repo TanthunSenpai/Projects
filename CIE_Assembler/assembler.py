@@ -23,7 +23,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             "halt": False, #Halt flag
             "inFlag": False, #Input flag
             "errorMsg": "Execution successful", #Error message to be given out in the case of a flag. By default it is set to be successful.
-            "stop": False #Flag for user stop 
+            "stop": False #Flag for user stop
             }
 
     def init_RAM(self): #Using a 256 byte RAM (16 by 16) in the form of a 2D list initialised to 00 in hex
@@ -34,7 +34,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
         return self.args["RAM"] #Return the initialised RAM list
 
     def showContents(self): #TEST FUNCTION TO BE CALLED FOR DEBUGGING PURPOSES
-        
+
         print("Args to be passed to interpreter.py: ")
         print(self.args)
         print("\nSymbol Table: ")
@@ -133,7 +133,7 @@ class Assembler: #Writing as a class so we can have a separate class for each as
             if len(string) == 1: #Need to add extra 0
                 string = "0" + string
             self.args["RAM"][address] = string
-            
+
 
     def passThrough(self, tokenList, data): #Being passed a list of tokens for each line (FROM ADI)
         #Using the CIE assembly language from the 9608 specification:
