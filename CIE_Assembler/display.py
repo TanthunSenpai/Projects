@@ -63,7 +63,7 @@ class Display:
         j = 0
         for i in range(256):
             if i%16 == 0:
-                self.lineNums.append(Label(self.ramFrame,text = denHex(j)[1]+"~", font = self.font, fg = "blue", bg = "white"))
+                self.lineNums.append(Label(self.ramFrame,text = denHex(i), font = self.font, fg = "blue", bg = "white"))
                 self.lineNums[j].grid(row = j, column = 0)
                 j+= 1
             self.textArray.append(Label(self.ramFrame, text = self.convFunc(self.ram[i]),font = self.font, width = 4, bg = "white" ))
@@ -85,6 +85,10 @@ class Display:
 
         for i,data in enumerate(self.ram):
             self.textArray[i]["text"] = self.convFunc(data)
+        for i,each in enumerate(self.lineNums):
+            each["text"] = self.convFunc(denHex(i*16))
+
+
 
 
     def numSys(self, numSys):

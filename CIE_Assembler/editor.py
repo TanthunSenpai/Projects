@@ -97,7 +97,7 @@ class Editor:
                 else:
                     return {}, text,0
 
-            return retDict, restText,k
+            return retDict, "\n"*k +restText
         else:
             return {}, text,0
 
@@ -111,7 +111,7 @@ class Editor:
         text = self.textArea.get('0.0', 'end').rstrip()
         if text == "":
             return False, {}
-        data, text, k = self.testData(text)
+        data, text = self.testData(text)
         text = text.split("\n")
         ret = []
         error = False
@@ -128,14 +128,14 @@ class Editor:
                     elif 'B' in each and each[1:].isnumeric():
                         for ch in each[1:]:
                             if int(ch) > 1:
-                                self.report("Error on Line "+ str(i+1 + k) + ": - "+ "Number is not binary")
+                                self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not binary")
                                 return False, data
                         line[line.index(each)] = int(each[1:], 2)
 
                     elif '&' in each and each[1:].isalnum():
                         for ch in each[1:]:
                             if (ord(ch) > ord("F") or ord(ch) < ord("A")) and not ch.isnumeric():
-                                self.report("Error on Line "+ str(i+1 + k) + ": - "+ "Number is not hex")
+                                self.report("Error on Line "+ str(i+1) + ": - "+ "Number is not hex")
                                 return False, data
                         line[line.index(each)] = int(each[1:], 16)
 
@@ -147,7 +147,7 @@ class Editor:
                 valid, msg = self.syntax_analysis(line)
                 if not valid:
                     print(line)
-                    self.report("Error on Line "+ str(i+1 + k) + ": - "+ msg)
+                    self.report("Error on Line "+ str(i+1) + ": - "+ msg)
                     return False, data
 
                 for each in line:
@@ -242,7 +242,8 @@ class Editor:
                             print("helo")
                             if not(isinstance(tokens[opCodePos + 1], int)):
                                 return False, "Bad Operand"
-                            tokens[opCodePos + 1] = str(tokens[opCodePos + 1])
+                            else:
+                                tokens[opCodePos + 1] = str(tokens[opCodePos + 1])
                         else:
                             return False, "Bad Operand"
                 else:

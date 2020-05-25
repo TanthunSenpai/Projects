@@ -14,9 +14,8 @@ from inBar import *
 from interpreter import *
 
 
-
 if __name__ == "__main__":
-    VERSION = "0.1"
+    VERSION = "1.0"
     root = Tk()
     root.title("CIE Assembler virtual machine")
     root.geometry("1500x800")
