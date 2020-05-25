@@ -68,7 +68,7 @@ def LDM(args):
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
 
 def LDD(args):
-    address = int(args["RAM"][(int(args["PC"], 16) + 1) % 256] , 16) 
+    address = int(args["RAM"][(int(args["PC"], 16) + 1) % 256] , 16)
     value = args["RAM"][address]
     args["ACC"] = value  #in hex string
     args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
@@ -152,8 +152,8 @@ def JPE(args):
         args["PC"] = denHex(addrss)     #in hex str
     else:   #case: not equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
-    args["ZMP"] == False
-    
+    args["ZMP"] = False
+
 def JPN(args):
     addrss = int(args["RAM"][(int(args["PC"],16)+1)%256],16)    #in denary
     if args["ZMP"] == False:  #case: not equal
@@ -161,7 +161,7 @@ def JPN(args):
         args["PC"] = denHex(addrss)     #in hex str
     else:   #case: equal, continue.
         args["PC"] = denHex((int(args["PC"],16) + 2) % 256)    #in hex string
-    args["ZMP"] == False
+    args["ZMP"] = False
 
 def inStub(letter):
     return letter
@@ -189,7 +189,7 @@ HEXTOFUNCTIONDICT = {
     "0D": LDX,
     "0E": LDR,
     "0F": STO,
-    "1A": ADD,  
+    "1A": ADD,
     "1B": INC,
     "1C": DEC,
     "1D": JMP,
