@@ -69,7 +69,9 @@ if __name__ == "__main__":
             "halt": False,
             "inFlag": False,
             "stop": False,
-        }),
+        },
+        [None for i in range(256)]
+        ),
         interpreter.stop,
         interpreter.start
         )

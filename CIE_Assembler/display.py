@@ -55,9 +55,9 @@ class Display:
                 self.regArray[reg] = Label(self.regFrame, text = self.convFunc(self.registers[reg]), font = self.font, bg = "white")
                 self.regArray[reg].grid(row = 1 , column = j)
             j+=1
-        self.regArray["PC-label"]["bg"] = "light Blue"
+        self.regArray["PC-label"]["bg"] = "cyan"
 
-        self.highlighted = {}
+        self.hgList = ["white" for i in range(256)]
 
         #Loop to initialise the textArray
         j = 0
@@ -102,22 +102,30 @@ class Display:
 
         pass
 
-    def remove_hg(self,reg):
-        self.textArray[int(self.registers[reg],16)]["bg"] = "white"
+    def remove_hg(self,ind):
+        self.textArray[ind]["bg"] = self.hgList[ind]
         pass
 
-    def add_hg(self,reg, clr):
-        self.textArray[int(self.registers[reg],16)]["bg"] = clr
+    def add_hg(self,ind, clr):
+        self.textArray[ind]["bg"] = clr
         pass
 
 
 
-    def updateArgs(self,args):
+    def updateArgs(self,args, assem = None):
+        if assem != None:
+            for i,val in enumerate(assem):
+                if val == "OPCODE":
+                    self.hgList[i] = "light Blue"
+                    self.remove_hg(i)
+                if val == "DB":
+                    self.hgList[i] = "orchid1"
+                    self.remove_hg(i)
         arggs = copy.deepcopy(args)
-        self.remove_hg("PC")
+        self.remove_hg(int(self.registers["PC"],16))
         for reg in self.registers:
             self.registers[reg] = arggs[reg]
-        self.add_hg("PC", "light blue")
+        self.add_hg(int(self.registers["PC"],16), "cyan")
         self.ram = arggs["RAM"]
         self.update()
 
@@ -125,10 +133,13 @@ class Display:
 
 def test(x,args):
     n = int(args["PC"],16)
-    n += 1
+    n = (n-1)%256
     args["PC"] = denHex(n)
     print(denHex(n))
-    x.updateArgs(args)
+    k = ["none" for i in range(256)]
+    k[0] = "OPCODE"
+    k[1] = "DB"
+    x.updateArgs(args,k )
 
 if __name__ == "__main__":
     root = Tk()
