@@ -55,8 +55,11 @@ class ToolBar:
         self.fileNameText.insert(END,value)
 
     def CurSelect(self,event):
-        self.value = self.savedFileDisplay.get(self.savedFileDisplay.curselection())
-        self.setFile(self.value)
+        try:
+            self.value = self.savedFileDisplay.get(self.savedFileDisplay.curselection())
+            self.setFile(self.value)
+        except:
+            print("")
 
     def writeFile(self,fileName):
         self.text =self.get_text()
@@ -82,10 +85,10 @@ class ToolBar:
 
         if fileName in self.existingFile and self.validFlag == True:
             self.errorPopup = Toplevel()
-            self.errorPopup.title("ERROR")
-            self.errorLabel = Label(self.errorPopup,text ="File Already exist. Do you want to overwrite it?",height = 5, width = 20, font =("Times",11),wraplength =100)
+            self.errorPopup.title("?")
+            self.errorLabel = Label(self.errorPopup,text ="File Already exist. Do you want to overwrite it?",height = 5, width = 30, font =("Times",11),wraplength =200)
             self.errorLabel.grid(row = 0, column = 0,columnspan=2)
-            self.yesBtn = Button(self.errorPopup,text ="Yes",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.writeFile(fileName))
+            self.yesBtn = Button(self.errorPopup,text ="Yes",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.acceptOverwrite(fileName))
             self.yesBtn.grid(row = 1, column =0)
             self.noBtn = Button(self.errorPopup,text ="No",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.errorPopup.destroy())
             self.noBtn.grid(row = 1, column =1)
@@ -93,9 +96,17 @@ class ToolBar:
 
         elif self.validFlag == True and fileName[-4:] == ".txt":
             self.writeFile(fileName)
+            self.popSave.destroy()
 
         elif self.validFlag == True:
             self.writeFile(fileName+".txt")
+            self.popSave.destroy()
+
+    def acceptOverwrite(self,fileName):
+        self.popSave.destroy()
+        self.errorPopup.destroy()
+        self.writeFile(fileName)
+
 
 
     def pop_save(self):
@@ -116,7 +127,7 @@ class ToolBar:
         self.savedFileDisplay = Listbox(self.popSave,width = 50,font = self.font)
         self.savedFileDisplay.grid(row = 1,column = 0, columnspan = 3)
         self.savedFileDisplay.bind('<<ListboxSelect>>',self.CurSelect)
-        self.fileLabel = Label(self.popSave,text ="File Name: ",height = 1,width = 7,font = ("times",12))
+        self.fileLabel = Label(self.popSave,text ="File Name: ",height = 1,width = 9,font = ("times",12))
         self.fileLabel.grid(row = 3,column = 0,sticky = "e")
         self.existingFile = []
         for fileName in os.listdir(path):
