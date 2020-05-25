@@ -87,19 +87,19 @@ class Editor:
                                 if int(line[1]) < 256 and int(line[1]) >= 0:
                                     retDict[line[0]] = int(line[1])
                                 else:
-                                    return {}, text,0
+                                    return {}, text
                             else:
-                                return {}, text,0
+                                return {}, text
                         else:
-                            return {}, text,0
+                            return {}, text
                     else:
-                        return {}, text,0
+                        return {}, text
                 else:
-                    return {}, text,0
+                    return {}, text
 
             return retDict, "\n"*k +restText
         else:
-            return {}, text,0
+            return {}, text
 
 
 
