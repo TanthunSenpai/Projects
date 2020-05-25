@@ -146,7 +146,6 @@ class Editor:
 
                 valid, msg = self.syntax_analysis(line)
                 if not valid:
-                    print(line)
                     self.report("Error on Line "+ str(i+1) + ": - "+ msg)
                     return False, data
 
@@ -160,7 +159,6 @@ class Editor:
 
 
         self.report("No error: " + random.choice(cheerMessages))
-        print(ret)
         return ret, data
 
 
@@ -239,7 +237,6 @@ class Editor:
 
                     else:
                         if tokens[opCodePos] == "CMP":
-                            print("helo")
                             if not(isinstance(tokens[opCodePos + 1], int)):
                                 return False, "Bad Operand"
                             else:
