@@ -13,7 +13,6 @@ class ToolBar:
         self.verStr = "None"
 
         self.bars["File"] = Menu(self.toolbar, tearoff = False)
-        self.bars["Edit"] = Menu(self.toolbar, tearoff = False)
         self.bars["Tools"] = Menu(self.toolbar, tearoff = False)
         self.bars["View"] = Menu(self.toolbar, tearoff = False)
         self.bars["About"] = Menu(self.toolbar, tearoff = False)
@@ -31,7 +30,6 @@ class ToolBar:
 
         self.bars["File"].add_command(label = "Save", command = lambda: self.pop_save())
         self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
-        self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
         self.freq = Menu(self.bars["Tools"], tearoff = False)
         self.bars["Tools"].add_cascade(label = "Frequency", menu=  self.freq)
@@ -209,12 +207,20 @@ class ToolBar:
     def update_sym(self,sym):
         self.sym = sym
 
+    def conv(self,x):
+        pass
+
+
 
     def pop_symbol(self):  #passing in a func from display in main
 
 
         keyList = list(self.sym.keys())
         valList = list(self.sym.values())
+        if self.nSys[0] == "Hex":
+            self.conv = lambda x: x
+        elif self.nSys[0] == "Dec":
+            self.conv = lambda x: "{:03d}".format(int(x,16))
 
         top = Toplevel()
         top.title("Symbol Table")
@@ -229,7 +235,7 @@ class ToolBar:
         for i in range(len(keyList)):
             keyLab = Label(top,text=keyList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
             keyLab.grid(row=r,column=0,sticky=N+E+S+W)
-            valLab = Label(top,text=valList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
+            valLab = Label(top,text=self.conv(valList[i]),bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
             valLab.grid(row=r,column=1,sticky=N+E+S+W)
             r += 1
 

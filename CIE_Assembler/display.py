@@ -29,7 +29,7 @@ class Display:
         self.textArray = [] # a list of label objects
         self.convFunc = lambda x: x
         self.lineNums = [] # a list containing line number labels in display
-
+        self.nSys = ["Hex"]
         self.registers = {
             "PC": "00",
             "ACC": "00",
@@ -94,8 +94,10 @@ class Display:
     def numSys(self, numSys):
         if numSys == "Hex":
             self.convFunc = lambda x: x
+            self.nSys[0] = "Hex"
         elif numSys == "Dec":
             self.convFunc =  lambda x: "{:03d}".format(int(x,16))
+            self.nSys[0] = "Dec"
         self.update()
 
         pass
