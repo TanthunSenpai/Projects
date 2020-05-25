@@ -34,10 +34,17 @@ class ToolBar:
         self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
         self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
-        self.bars["Tools"].add_command(label = "Frequency")
+        self.freq = Menu(self.bars["Tools"], tearoff = False)
+        self.bars["Tools"].add_cascade(label = "Frequency", menu=  self.freq)
+        self.freq.add_command(label = "1 HZ",command =  lambda: self.set_freq(1))
+        self.freq.add_command(label = "2 HZ",command =  lambda: self.set_freq(2))
+        self.freq.add_command(label = "4 HZ",command =  lambda: self.set_freq(3))
+        self.freq.add_command(label = "8 HZ",command =  lambda: self.set_freq(4))
+        self.freq.add_command(label = "16 HZ",command =  lambda: self.set_freq(5))
         self.bars["About"].add_command(label = "Info", command = self.pop_info)
 
         self.sym = {}
+
 
 
 
@@ -126,7 +133,7 @@ class ToolBar:
 
 
 
-    def set_freq(self):
+    def set_freq(self, freq):
 
         pass
 

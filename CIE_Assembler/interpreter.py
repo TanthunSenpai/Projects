@@ -51,6 +51,9 @@ class Interpreter:
         self.args["errorMsg"] = f"Execution frequency has been set to {newFreq}ms between instructions."
         self.displayError(self.args["errorMsg"])
 
+    def set_freq(self,freq):
+        self.runFreq = int(0.5**(freq-1)*1000)
+
 
 if __name__ == "__main__":
     root = Tk()
