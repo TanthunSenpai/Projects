@@ -59,7 +59,6 @@ class Editor:
         self.textArea.pack(side=LEFT)
 
         self.update_numLine(None)
-        self.textArea.bind("<Key>",self.update_numLine)
 
     def yview(self, *args):
         self.numLine.yview(*args)
@@ -276,7 +275,7 @@ class Editor:
         for lineNum in range(self.endLineNo):
             self.numLine.insert(END,lineNum+1)
         self.numLine.yview_moveto(currPos[0])
-        self.master.after(100,lambda: self.update_numLine(1))
+        self.master.after(50,lambda: self.update_numLine(1))
 
 
 
