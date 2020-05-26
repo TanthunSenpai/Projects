@@ -13,7 +13,6 @@ class ToolBar:
         self.verStr = "None"
 
         self.bars["File"] = Menu(self.toolbar, tearoff = False)
-        self.bars["Edit"] = Menu(self.toolbar, tearoff = False)
         self.bars["Tools"] = Menu(self.toolbar, tearoff = False)
         self.bars["View"] = Menu(self.toolbar, tearoff = False)
         self.bars["About"] = Menu(self.toolbar, tearoff = False)
@@ -31,7 +30,6 @@ class ToolBar:
 
         self.bars["File"].add_command(label = "Save", command = lambda: self.pop_save())
         self.bars["File"].add_command(label = "Load", command = lambda: self.pop_load())
-        self.bars["Edit"].add_command(label = "Preferences")
         self.bars["Tools"].add_command(label = "Symbol Table", command = lambda: self.pop_symbol())
         self.freq = Menu(self.bars["Tools"], tearoff = False)
         self.bars["Tools"].add_cascade(label = "Frequency", menu=  self.freq)
@@ -57,8 +55,11 @@ class ToolBar:
         self.fileNameText.insert(END,value)
 
     def CurSelect(self,event):
-        self.value = self.savedFileDisplay.get(self.savedFileDisplay.curselection())
-        self.setFile(self.value)
+        try:
+            self.value = self.savedFileDisplay.get(self.savedFileDisplay.curselection())
+            self.setFile(self.value)
+        except:
+            print("")
 
     def writeFile(self,fileName):
         self.text =self.get_text()
@@ -84,10 +85,10 @@ class ToolBar:
 
         if fileName in self.existingFile and self.validFlag == True:
             self.errorPopup = Toplevel()
-            self.errorPopup.title("ERROR")
-            self.errorLabel = Label(self.errorPopup,text ="File Already exist. Do you want to overwrite it?",height = 5, width = 20, font =("Times",11),wraplength =100)
+            self.errorPopup.title("?")
+            self.errorLabel = Label(self.errorPopup,text ="File Already exist. Do you want to overwrite it?",height = 5, width = 30, font =("Times",11),wraplength =200)
             self.errorLabel.grid(row = 0, column = 0,columnspan=2)
-            self.yesBtn = Button(self.errorPopup,text ="Yes",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.writeFile(fileName))
+            self.yesBtn = Button(self.errorPopup,text ="Yes",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.acceptOverwrite(fileName))
             self.yesBtn.grid(row = 1, column =0)
             self.noBtn = Button(self.errorPopup,text ="No",width = 10,height = 1,font = ("Times",11), borderwidth = 3,command = lambda: self.errorPopup.destroy())
             self.noBtn.grid(row = 1, column =1)
@@ -95,9 +96,17 @@ class ToolBar:
 
         elif self.validFlag == True and fileName[-4:] == ".txt":
             self.writeFile(fileName)
+            self.popSave.destroy()
 
         elif self.validFlag == True:
             self.writeFile(fileName+".txt")
+            self.popSave.destroy()
+
+    def acceptOverwrite(self,fileName):
+        self.popSave.destroy()
+        self.errorPopup.destroy()
+        self.writeFile(fileName)
+
 
 
     def pop_save(self):
@@ -118,7 +127,7 @@ class ToolBar:
         self.savedFileDisplay = Listbox(self.popSave,width = 50,font = self.font)
         self.savedFileDisplay.grid(row = 1,column = 0, columnspan = 3)
         self.savedFileDisplay.bind('<<ListboxSelect>>',self.CurSelect)
-        self.fileLabel = Label(self.popSave,text ="File Name: ",height = 1,width = 7,font = ("times",12))
+        self.fileLabel = Label(self.popSave,text ="File Name: ",height = 1,width = 9,font = ("times",12))
         self.fileLabel.grid(row = 3,column = 0,sticky = "e")
         self.existingFile = []
         for fileName in os.listdir(path):
@@ -209,12 +218,20 @@ class ToolBar:
     def update_sym(self,sym):
         self.sym = sym
 
+    def conv(self,x):
+        pass
+
+
 
     def pop_symbol(self):  #passing in a func from display in main
 
 
         keyList = list(self.sym.keys())
         valList = list(self.sym.values())
+        if self.nSys[0] == "Hex":
+            self.conv = lambda x: x
+        elif self.nSys[0] == "Dec":
+            self.conv = lambda x: "{:03d}".format(int(x,16))
 
         top = Toplevel()
         top.title("Symbol Table")
@@ -229,7 +246,7 @@ class ToolBar:
         for i in range(len(keyList)):
             keyLab = Label(top,text=keyList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
             keyLab.grid(row=r,column=0,sticky=N+E+S+W)
-            valLab = Label(top,text=valList[i],bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
+            valLab = Label(top,text=self.conv(valList[i]),bd=1,relief="solid",font=("Consolas",18),anchor=CENTER,justify=CENTER)
             valLab.grid(row=r,column=1,sticky=N+E+S+W)
             r += 1
 

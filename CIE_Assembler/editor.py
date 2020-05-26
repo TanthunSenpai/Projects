@@ -45,7 +45,7 @@ class Editor:
                                width = 3,
                                height= 25,
                                font = self.font,
-                               yscrollcommand =self.scrollBar.set
+                               yscrollcommand =self.scrollBar.set,
                                )
         self.numLine.pack(side = LEFT)
 
@@ -58,7 +58,7 @@ class Editor:
                             )
         self.textArea.pack(side=LEFT)
 
-
+        self.update_numLine(None)
         self.textArea.bind("<Key>",self.update_numLine)
 
     def yview(self, *args):
@@ -73,10 +73,13 @@ class Editor:
             dataText = text[:ptr+5]
             restText = text[ptr+5:]
             dataText = text[4:len(dataText) - 5]
-            dataText.strip()
-            tokens = dataText.split()
+            tokens = dataText.split("\n")
+            k = -1
             for each in tokens:
-                if ':' in each:
+                k += 1
+                if each == "":
+                    continue
+                elif ':' in each:
                     line = each.split(":")
                     if len(line) == 2:
                         if line[0].isnumeric():
@@ -94,7 +97,7 @@ class Editor:
                 else:
                     return {}, text
 
-            return retDict, restText
+            return retDict, "\n"*k +restText
         else:
             return {}, text
 
@@ -156,7 +159,6 @@ class Editor:
 
 
         self.report("No error: " + random.choice(cheerMessages))
-        print(ret)
         return ret, data
 
 
@@ -234,7 +236,13 @@ class Editor:
                                 tokens[opCodePos+1] =  "#"+tokens[opCodePos + 1][1:]
 
                     else:
-                        return False, "Bad Operand"
+                        if tokens[opCodePos] == "CMP":
+                            if not(isinstance(tokens[opCodePos + 1], int)):
+                                return False, "Bad Operand"
+                            else:
+                                tokens[opCodePos + 1] = str(tokens[opCodePos + 1])
+                        else:
+                            return False, "Bad Operand"
                 else:
                     return False, "Empty operand"
 
@@ -262,11 +270,13 @@ class Editor:
         print(text)
 
     def update_numLine(self,event):
+        currPos = self.textArea.yview()
         self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])-1
         self.numLine.delete(0,END)
         for lineNum in range(self.endLineNo):
             self.numLine.insert(END,lineNum+1)
-
+        self.numLine.yview_moveto(currPos[0])
+        self.master.after(100,lambda: self.update_numLine(1))
 
 
 
