@@ -45,7 +45,7 @@ class Editor:
                                width = 3,
                                height= 25,
                                font = self.font,
-                               yscrollcommand =self.scrollBar.set
+                               yscrollcommand =self.scrollBar.set,
                                )
         self.numLine.pack(side = LEFT)
 
@@ -58,7 +58,7 @@ class Editor:
                             )
         self.textArea.pack(side=LEFT)
 
-
+        self.update_numLine(None)
         self.textArea.bind("<Key>",self.update_numLine)
 
     def yview(self, *args):
@@ -270,11 +270,13 @@ class Editor:
         print(text)
 
     def update_numLine(self,event):
+        currPos = self.textArea.yview()
         self.endLineNo = int(self.textArea.index("end")[:len(self.textArea.index("end"))-2])-1
         self.numLine.delete(0,END)
         for lineNum in range(self.endLineNo):
             self.numLine.insert(END,lineNum+1)
-
+        self.numLine.yview_moveto(currPos[0])
+        self.master.after(100,lambda: self.update_numLine(1))
 
 
 
